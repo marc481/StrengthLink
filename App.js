@@ -1,20 +1,60 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack"; // Correct import for native stack navigator
+import HomeScreen from "./src/components/screens/HomeScreen";
+import ProfileScreen from "./src/components/screens/ProfileScreen";
+import WorkoutScreen from "./src/components/screens/WorkoutScreen";
+import SocialScreen from "./src/components/screens/SocialScreen";
+import ProgressScreen from "./src/components/screens/ProgressScreen"; // Corrected ProgressScreen import
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+export const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="HomeScreen"
+        screenOptions={{
+          headerStyle: { backgroundColor: "black" },
+          headerTintColor: "white",
+        }}
+      >
+        {/* Home Screen */}
+        <Stack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{ title: "StrengthLink" }}
+        />
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+        {/* Workout Screen */}
+        <Stack.Screen
+          name="WorkoutScreen"
+          component={WorkoutScreen}
+          options={{ title: "Workout" }}
+        />
+
+        {/* Progress Screen */}
+        <Stack.Screen
+          name="ProgressScreen"
+          component={ProgressScreen}
+          options={{ title: "Progress" }}
+        />
+
+        {/* Social Screen */}
+        <Stack.Screen
+          name="SocialScreen"
+          component={SocialScreen}
+          options={{ title: "Socials" }}
+        />
+
+        {/* Profile Screen */}
+        <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{ title: "Profile" }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
