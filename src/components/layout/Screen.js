@@ -1,24 +1,16 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import React from "react";
+import { SafeAreaView, StyleSheet } from "react-native";
+import { COLORS } from "../../config/theme";
 
 const Screen = ({ children }) => {
-  //Initialisaliations
-  //State
-  //Handlers
-  //Views
-  return (
-    <View style={styles.screen}>
-      {children}
-      <StatusBar style="light" />
-    </View>
-  );
+  return <SafeAreaView style={styles.screen}>{children}</SafeAreaView>;
 };
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 15,
     flex: 1,
-    backgroundColor: "#f8ecc2",
+    backgroundColor: COLORS.background, // Use light beige background
+    padding: 20,
   },
 });
 

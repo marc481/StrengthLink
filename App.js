@@ -1,10 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack"; // Correct import for native stack navigator
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { COLORS } from "./src/config/theme";
 import HomeScreen from "./src/components/screens/HomeScreen";
 import ProfileScreen from "./src/components/screens/ProfileScreen";
 import WorkoutScreen from "./src/components/screens/WorkoutScreen";
 import SocialScreen from "./src/components/screens/SocialScreen";
-import ProgressScreen from "./src/components/screens/ProgressScreen"; // Corrected ProgressScreen import
+import ProgressScreen from "./src/components/screens/ProgressScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,8 +15,9 @@ export const App = () => {
       <Stack.Navigator
         initialRouteName="HomeScreen"
         screenOptions={{
-          headerStyle: { backgroundColor: "black" },
-          headerTintColor: "white",
+          headerStyle: { backgroundColor: COLORS.headerBackground },
+          headerTintColor: COLORS.headerText,
+          headerTitleAlign: "center",
         }}
       >
         {/* Home Screen */}
