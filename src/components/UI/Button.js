@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native"; // Ensure View is imported
 import { COLORS, FONTS } from "../../config/theme";
 
 export const Button = ({ label, onPress, styleLabel, styleButton }) => {
@@ -7,6 +8,10 @@ export const Button = ({ label, onPress, styleLabel, styleButton }) => {
       <Text style={[styles.label, styleLabel]}>{label}</Text>
     </Pressable>
   );
+};
+
+export const ButtonTray = ({ children, style }) => {
+  return <View style={[styles.tray, style]}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -22,6 +27,11 @@ const styles = StyleSheet.create({
   label: {
     ...FONTS.button, // Use bold button font
     color: COLORS.buttonText, // White text
+  },
+  tray: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10, // For spacing between buttons
   },
 });
 
