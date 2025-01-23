@@ -1,11 +1,13 @@
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { COLORS } from "./src/config/theme";
-import HomeScreen from "./src/components/screens/HomeScreen";
+import FooterNavigator from "./src/components/navigators/FooterNavigator"; // Footer navigation for some sections
+import HomeScreen from "./src/components/screens/HomeScreen"; // Initial screen
+import ProgressScreen from "./src/components/screens/ProgressScreen";
 import ProfileScreen from "./src/components/screens/ProfileScreen";
 import WorkoutScreen from "./src/components/screens/WorkoutScreen";
 import SocialScreen from "./src/components/screens/SocialScreen";
-import ProgressScreen from "./src/components/screens/ProgressScreen";
+import { COLORS } from "./src/config/theme";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +27,14 @@ export const App = () => {
           name="HomeScreen"
           component={HomeScreen}
           options={{ title: "StrengthLink" }}
+        />
+
+        {/* Footer Navigator */}
+
+        <Stack.Screen
+          name="FooterNavigator"
+          component={FooterNavigator}
+          options={{ headerShown: false }}
         />
 
         {/* Workout Screen */}

@@ -1,39 +1,46 @@
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Button, ButtonTray } from "../UI/Button";
 import Screen from "../layout/Screen";
-import Button from "../UI/Button";
 
 const HomeScreen = ({ navigation }) => {
-  // Static List of HomeScreen options
-  const options = [
-    { id: "1", label: "Start Workout", screen: "WorkoutScreen" },
-    { id: "2", label: "Progress", screen: "ProgressScreen" },
-    { id: "3", label: "Socials", screen: "SocialScreen" },
-    { id: "4", label: "Profile", screen: "ProfileScreen" },
-  ];
-
-  const renderItem = ({ item }) => (
-    <Button
-      label={item.label}
-      onPress={() => navigation.navigate(item.screen)}
-      styleButton={styles.button}
-    />
-  );
-
   return (
     <Screen>
-      <FlatList
-        data={options}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-      />
+      <ButtonTray>
+        <Button
+          label="Workout"
+          onPress={() =>
+            navigation.navigate("FooterNavigator", { screen: "Workout" })
+          }
+        />
+        <Button
+          label="Socials"
+          onPress={() =>
+            navigation.navigate("FooterNavigator", { screen: "Social" })
+          }
+        />
+        <Button
+          label="Progress"
+          onPress={() =>
+            navigation.navigate("FooterNavigator", { screen: "Progress" })
+          }
+        />
+        <Button
+          label="Profile"
+          onPress={() =>
+            navigation.navigate("FooterNavigator", { screen: "Profile" })
+          }
+        />
+      </ButtonTray>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    marginVertical: 10, // Add space between buttons
+  buttonTray: {
+    flexDirection: "row",
+    gap: 15,
+    justifyContent: "center",
   },
 });
 
