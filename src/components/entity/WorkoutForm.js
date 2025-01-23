@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Form from "../UI/Form";
+import Icons from "../UI/icons";
+
 const defaultExercise = {
   id: null,
   name: "",
@@ -46,7 +48,7 @@ const WorkoutForm = ({ originalExercise, onSubmit, onCancel }) => {
       onSubmit={handleSubmit}
       onCancel={onCancel}
       submitLabel={originalExercise ? "Modify" : "Add"}
-      submitIcon={originalExercise ? <Form.Icon.Edit /> : <Form.Icon.Add />}
+      submitIcon={originalExercise ? <Icons.Edit /> : <Icons.Add />}
     >
       <Form.InputText
         label="Exercise Name"

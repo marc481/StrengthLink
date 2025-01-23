@@ -7,13 +7,10 @@ import { COLORS } from "../../config/theme";
 import workout from "../../data/workout";
 
 const WorkoutScreen = ({ navigation }) => {
-  // State
+  // State ----------------------------
   const [exercises, setExercises] = useState(workout.exercises);
 
-  // Handlers
-  const handleDelete = (exercise) =>
-    setExercises(exercises.filter((item) => item.id !== exercise.id));
-
+  // Handlers ---------------------------
   const handleAdd = (exercise) =>
     setExercises([...exercises, { ...exercise, id: Date.now() }]);
 
@@ -24,28 +21,33 @@ const WorkoutScreen = ({ navigation }) => {
       )
     );
 
-  const onDelete = (exercise) => {
-    handleDelete(exercise);
-    navigation.goBack();
+  const handleDelete = (exerciseToDelete) =>
+    setExercises(
+      exercises.filter((exercise) => exercise.id !== exerciseToDelete.id)
+    );
+
+  const gotoAddScreen = () => {
+    navigation.navigate("AddExerciseScreen", {
+      onSave: handleAdd,
+    });
   };
 
-  const onAdd = (exercise) => {
-    handleAdd(exercise);
-    navigation.goBack();
+  const gotoModifyScreen = (exercise) => {
+    navigation.navigate("AddExerciseScreen", {
+      exercise,
+      onSave: handleModify,
+    });
   };
 
-  const onModify = (exercise) => {
-    handleModify(exercise);
-    navigation.navigate("WorkoutScreen");
+  const gotoViewScreen = (exercise) => {
+    navigation.navigate("ExerciseViewScreen", {
+      exercise,
+      onModify: handleModify,
+      onDelete: handleDelete,
+    });
   };
 
-  const gotoAddScreen = () =>
-    navigation.navigate("AddExerciseScreen", { onSave: onAdd });
-
-  const gotoModifyScreen = (exercise) =>
-    navigation.navigate("AddExerciseScreen", { exercise, onSave: onModify });
-
-  // Views
+  // Views -----------------------------
   return (
     <Screen>
       {/* Add Exercise Button */}
@@ -54,7 +56,7 @@ const WorkoutScreen = ({ navigation }) => {
       </ButtonTray>
 
       {/* List of Exercises */}
-      <WorkoutList workouts={exercises} onSelect={gotoModifyScreen} />
+      <WorkoutList workouts={exercises} onSelect={gotoViewScreen} />
     </Screen>
   );
 };

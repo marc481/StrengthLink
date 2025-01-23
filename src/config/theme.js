@@ -8,10 +8,13 @@ export const COLORS = {
   headerText: "#FFFFFF", // White for header text
   bodyText: "#000000", // Black for general text
   mutedText: "#5F5F5F", // Grey for secondary text
+  infoHighlight: "#4A90E2", // Light blue for highlighted info text
 
   // Buttons
   buttonBackground: "#4A90E2", // Light blue for buttons
   buttonText: "#FFFFFF", // White for button text
+  buttonDangerBackground: "#FFC0CB", // Misty rose for danger buttons
+  buttonDangerText: "#FF0000", // Red for danger button text
 
   // Footer Tabs
   footerActiveText: "#FFFFFF", // White for active tab
@@ -21,6 +24,9 @@ export const COLORS = {
   inputBackground: "#FFFFFF", // White for input fields
   inputBorder: "#CCCCCC", // Light grey for input borders
   inputText: "#000000", // Black for input text
+
+  // Borders and Dividers
+  divider: "#DADADA", // Light grey for dividers
 };
 
 export const FONTS = {
@@ -39,6 +45,16 @@ export const FONTS = {
     fontWeight: "normal",
     color: COLORS.mutedText,
   },
+  bold: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: COLORS.bodyText,
+  },
+  infoHighlight: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: COLORS.infoHighlight,
+  },
   button: {
     fontSize: 16,
     fontWeight: "bold",
@@ -55,4 +71,37 @@ export const SPACING = {
   small: 8,
   medium: 16,
   large: 24,
+  extraLarge: 32,
+};
+
+export const STYLES = {
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: SPACING.medium,
+  },
+  infoTray: {
+    gap: SPACING.small,
+    padding: SPACING.medium,
+    backgroundColor: COLORS.inputBackground,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.divider,
+  },
+  boldText: {
+    ...FONTS.bold,
+  },
+  mutedText: {
+    ...FONTS.muted,
+  },
+  buttonTray: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: SPACING.small,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: COLORS.divider,
+    marginVertical: SPACING.small,
+  },
 };

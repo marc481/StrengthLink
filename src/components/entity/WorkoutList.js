@@ -6,11 +6,17 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { COLORS } from "../../config/theme";
+import { COLORS, FONTS } from "../../config/theme";
 
 const WorkoutList = ({ workouts, onSelect }) => {
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.listItem} onPress={() => onSelect(item)}>
+    <TouchableOpacity
+      style={({ pressed }) => [
+        styles.listItem,
+        pressed && styles.listItemPressed,
+      ]}
+      onPress={() => onSelect(item)}
+    >
       <View>
         {/* Display Exercise Name */}
         <Text style={styles.exerciseName}>{item.name}</Text>
@@ -21,6 +27,16 @@ const WorkoutList = ({ workouts, onSelect }) => {
       </View>
     </TouchableOpacity>
   );
+
+  if (!workouts.length) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>
+          No exercises available. Add one to get started!
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
@@ -35,17 +51,42 @@ const styles = StyleSheet.create({
   listItem: {
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.background,
+    borderBottomColor: COLORS.inputBorder,
+    backgroundColor: COLORS.inputBackground,
+    borderRadius: 8,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    elevation: 2, // Shadow for Android
+    shadowColor: COLORS.bodyText, // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  listItemPressed: {
+    backgroundColor: COLORS.buttonBackground, // Highlight color on press
   },
   exerciseName: {
-    fontSize: 18,
+    ...FONTS.body,
     fontWeight: "bold",
-    color: COLORS.primaryText,
+    fontSize: 18,
+    marginBottom: 5,
   },
   details: {
+    ...FONTS.body,
     fontSize: 14,
-    color: COLORS.primaryText,
+    color: COLORS.mutedText,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  emptyText: {
+    ...FONTS.body,
+    fontSize: 16,
+    color: COLORS.mutedText,
+    textAlign: "center",
   },
 });
 

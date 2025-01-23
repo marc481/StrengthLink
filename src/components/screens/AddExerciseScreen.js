@@ -1,18 +1,25 @@
 import React from "react";
 import WorkoutForm from "../entity/WorkoutForm";
+import Screen from "../layout/Screen";
 
 const AddExerciseScreen = ({ route, navigation }) => {
-  const { exercise, onSave, onCancel } = route.params || {};
+  const { exercise, onSave } = route.params;
+
+  const handleSubmit = (data) => {
+    if (onSave) {
+      onSave(data);
+      navigation.goBack();
+    }
+  };
 
   return (
-    <WorkoutForm
-      originalExercise={exercise}
-      onSubmit={(updatedExercise) => {
-        onSave(updatedExercise);
-        navigation.goBack();
-      }}
-      onCancel={() => navigation.goBack()}
-    />
+    <Screen>
+      <WorkoutForm
+        originalExercise={exercise}
+        onSubmit={handleSubmit}
+        onCancel={() => navigation.goBack()}
+      />
+    </Screen>
   );
 };
 
