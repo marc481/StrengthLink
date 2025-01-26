@@ -1,9 +1,9 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddExerciseScreen from "../screens/AddExerciseScreen";
-import { COLORS } from "../../config/theme";
 import WorkoutScreen from "../screens/WorkoutScreen";
 import ExerciseViewScreen from "../screens/ExerciseViewScreen";
+import { COLORS } from "../../config/theme";
 
 const WorkoutStack = createNativeStackNavigator();
 
@@ -22,20 +22,15 @@ const WorkoutNavigator = () => {
         component={WorkoutScreen}
         options={{ title: "Workout" }}
       />
-
       <WorkoutStack.Screen
         name="AddExerciseScreen"
         component={AddExerciseScreen}
-        options={{ title: "Add Exercise", headerBackTitleVisible: false }}
+        options={{ title: "Add Exercise" }}
       />
-
       <WorkoutStack.Screen
         name="ExerciseViewScreen"
         component={ExerciseViewScreen}
-        options={{
-          title: "View Exercise Details",
-          headerBackTitleVisible: false,
-        }}
+        options={{ title: "View Exercise Details" }}
       />
     </WorkoutStack.Navigator>
   );

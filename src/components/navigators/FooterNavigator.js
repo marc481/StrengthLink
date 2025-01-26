@@ -1,9 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import WorkoutNavigator from "./WorkoutNavigator"; // Nested navigator for Workout
+import WorkoutNavigator from "./WorkoutNavigator";
 import SocialScreen from "../screens/SocialScreen";
 import ProgressScreen from "../screens/ProgressScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import HomeScreen from "../screens/HomeScreen";
 import { COLORS } from "../../config/theme";
 import Icons from "../UI/icons";
 
@@ -20,6 +21,21 @@ const FooterNavigator = () => {
         tabBarInactiveTintColor: COLORS.footerInactiveText,
       }}
     >
+      {/* Home Tab */}
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Icons.Home color={color} size={size} />
+          ),
+          tabBarStyle: { display: "none" },
+          headerShown: true,
+        }}
+      />
+
+      {/* Workout Tab */}
       <Tab.Screen
         name="Workout"
         component={WorkoutNavigator}
@@ -30,6 +46,8 @@ const FooterNavigator = () => {
           ),
         }}
       />
+
+      {/* Social Tab */}
       <Tab.Screen
         name="Social"
         component={SocialScreen}
@@ -40,6 +58,8 @@ const FooterNavigator = () => {
           ),
         }}
       />
+
+      {/* Progress Tab */}
       <Tab.Screen
         name="Progress"
         component={ProgressScreen}
@@ -50,6 +70,8 @@ const FooterNavigator = () => {
           ),
         }}
       />
+
+      {/* Profile Tab */}
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
