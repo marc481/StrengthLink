@@ -3,44 +3,19 @@ import { StyleSheet, Text, View } from "react-native";
 import Screen from "../layout/Screen";
 import { Button, ButtonTray } from "../UI/Button";
 import { COLORS, FONTS, SPACING } from "../../config/theme";
+import WorkoutView from "../entity/WorkoutView";
 
 const ExerciseViewScreen = ({ route, navigation }) => {
-  // Initialisation ---------------------
-  const { exercise, onDelete, onModify } = route.params;
-
-  // Handlers ---------------------------
-  const handleModify = () => {
-    navigation.navigate("AddExerciseScreen", { exercise, onSave: onModify });
-  };
+  const { exercise, onDelete } = route.params;
 
   const handleDelete = () => {
-    onDelete(exercise);
-    navigation.goBack();
+    onDelete(exercise.id);
+    navigation.goBacl();
   };
 
-  // View -----------------------------
   return (
     <Screen>
-      <View style={styles.container}>
-        {/* Exercise Name */}
-        <Text style={styles.exerciseName}>{exercise.name}</Text>
-
-        {/* Details */}
-        <Text style={styles.detailText}>Sets: {exercise.sets}</Text>
-        <Text style={styles.detailText}>Reps: {exercise.reps}</Text>
-        <Text style={styles.detailText}>Weight: {exercise.weight} kg</Text>
-      </View>
-
-      {/* Action Buttons */}
-      <ButtonTray>
-        <Button label="Edit" onPress={handleModify} />
-        <Button
-          label="Delete"
-          onPress={handleDelete}
-          styleButton={styles.dangerButton}
-          styleLabel={styles.dangerButtonText}
-        />
-      </ButtonTray>
+      <WorkoutView exercise={exercise} onDelete={handleDelete} />
     </Screen>
   );
 };

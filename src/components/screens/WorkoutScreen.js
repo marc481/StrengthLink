@@ -7,12 +7,17 @@ import { COLORS } from "../../config/theme";
 import workout from "../../data/workout";
 
 const WorkoutScreen = ({ navigation }) => {
-  // State ----------------------------
+  //Initialisaliations
+  //State
   const [exercises, setExercises] = useState(workout.exercises);
 
-  // Handlers ---------------------------
-  const handleAdd = (exercise) =>
-    setExercises([...exercises, { ...exercise, id: Date.now() }]);
+  //Handlers
+  const handleAdd = (exercise) => setExercises([...exercises, exercise]);
+
+  const onAdd = (exercise) => {
+    handleAdd(exercise);
+    navigation.goBack();
+  };
 
   const handleModify = (updatedExercise) =>
     setExercises(
@@ -21,41 +26,42 @@ const WorkoutScreen = ({ navigation }) => {
       )
     );
 
-  const handleDelete = (exerciseToDelete) =>
-    setExercises(
-      exercises.filter((exercise) => exercise.id !== exerciseToDelete.id)
-    );
-
-  const gotoAddScreen = () => {
-    navigation.navigate("AddExerciseScreen", {
-      onSave: handleAdd,
-    });
+  const onModify = (exercise) => {
+    handleModify(exercise);
+    navigation.navigate("WorkoutScreen");
   };
 
-  const gotoModifyScreen = (exercise) => {
-    navigation.navigate("AddExerciseScreen", {
-      exercise,
-      onSave: handleModify,
-    });
+  const handleDelete = (exerciseId) =>
+    setExercises(exercises.filter((exercise) => exercise.id !== exerciseId));
+
+  const onDelete = (exercise) => {
+    handleDelete(exercise);
+    navigation.goBack();
   };
 
-  const gotoViewScreen = (exercise) => {
-    navigation.navigate("ExerciseViewScreen", {
+  //Navigation Handlers
+
+  const gotoAddScreen = () =>
+    navigation.navigate("AddExerciseScreen", { onAdd: handleAdd });
+
+  const gotoModifyScreen = (exercise) =>
+    navigation.navigate("AddExerciseScreen", {
       exercise,
       onModify: handleModify,
+    });
+
+  const gotoViewScreen = (exercise) =>
+    navigation.navigate("ExerciseViewScreen", {
+      exercise,
       onDelete: handleDelete,
     });
-  };
 
-  // Views -----------------------------
+  // View ----------------------------------
   return (
     <Screen>
-      {/* Add Exercise Button */}
       <ButtonTray>
         <Button label="Add Exercise" onPress={gotoAddScreen} />
       </ButtonTray>
-
-      {/* List of Exercises */}
       <WorkoutList workouts={exercises} onSelect={gotoViewScreen} />
     </Screen>
   );
@@ -63,8 +69,33 @@ const WorkoutScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    padding: SPACING.large,
     backgroundColor: COLORS.background,
+    borderRadius: SPACING.small,
+    margin: SPACING.medium,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: SPACING.small,
+    elevation: 3,
+  },
+  exerciseName: {
+    ...FONTS.header,
+    color: COLORS.primaryText,
+    marginBottom: SPACING.small,
+  },
+  details: {
+    ...FONTS.body,
+    color: COLORS.mutedText,
+  },
+  modifyButton: {
+    backgroundColor: COLORS.buttonBackground,
+  },
+  deleteButton: {
+    backgroundColor: COLORS.dangerBackground || "mistyrose", // Ensure danger color is defined
+  },
+  deleteLabel: {
+    color: COLORS.dangerText || "red",
   },
 });
 
