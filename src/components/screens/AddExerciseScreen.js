@@ -2,16 +2,22 @@ import React from "react";
 import WorkoutForm from "../entity/WorkoutForm";
 import Screen from "../layout/Screen";
 
+// AddExerciseScreen Component
 const AddExerciseScreen = ({ route, navigation }) => {
-  const { exercise, onSave } = route.params;
+  //Initialisaliations
+  const { exercise, onAdd, onModify } = route.params;
 
+  //Handlers
   const handleSubmit = (data) => {
-    if (onSave) {
-      onSave(data);
-      navigation.goBack();
+    if (exercise) {
+      onModify(data);
+    } else {
+      onAdd(data); // Add new exercise
     }
+    navigation.goBack();
   };
 
+  //Views
   return (
     <Screen>
       <WorkoutForm

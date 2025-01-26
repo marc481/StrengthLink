@@ -1,46 +1,43 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Screen from "../layout/Screen";
-import { Button, ButtonTray } from "../UI/Button";
-import { COLORS, FONTS, SPACING } from "../../config/theme";
 import WorkoutView from "../entity/WorkoutView";
 
 const ExerciseViewScreen = ({ route, navigation }) => {
-  const { exercise, onDelete } = route.params;
+  // Initialisaliations
+  const { exercise, onDelete, onModify } = route.params;
 
+  // Handlers ---------------------------
   const handleDelete = () => {
     onDelete(exercise.id);
-    navigation.goBacl();
+    navigation.goBack(); // Navigate back to WorkoutScreen
   };
 
+  const handleModify = () => {
+    navigation.navigate("AddExerciseScreen", {
+      exercise,
+      onModify,
+    });
+  };
+
+  // Views -----------------------------
   return (
     <Screen>
-      <WorkoutView exercise={exercise} onDelete={handleDelete} />
+      <WorkoutView
+        workout={exercise}
+        onDelete={handleDelete}
+        onModify={handleModify}
+      />
     </Screen>
   );
 };
 
+// Styles -----------------------------
 const styles = StyleSheet.create({
   container: {
-    padding: SPACING.large,
-    backgroundColor: COLORS.background,
-    borderRadius: 8,
-    margin: SPACING.medium,
-  },
-  exerciseName: {
-    ...FONTS.header,
-    textAlign: "center",
-    marginBottom: SPACING.medium,
-  },
-  detailText: {
-    ...FONTS.body,
-    marginBottom: SPACING.small,
-  },
-  dangerButton: {
-    backgroundColor: COLORS.dangerButtonBackground,
-  },
-  dangerButtonText: {
-    color: COLORS.dangerButtonText,
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#fff",
   },
 });
 

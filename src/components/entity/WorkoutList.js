@@ -6,21 +6,15 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { COLORS, FONTS } from "../../config/theme";
+import { COLORS } from "../../config/theme";
 
-const WorkoutList = ({ workouts, onSelect }) => {
+const WorkoutList = ({ workouts, onSelect, onModify }) => {
+  //Initialisaliations
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={({ pressed }) => [
-        styles.listItem,
-        pressed && styles.listItemPressed,
-      ]}
-      onPress={() => onSelect(item)}
-    >
+    <TouchableOpacity style={styles.listItem} onPress={() => onSelect(item)}>
       <View>
-        {/* Display Exercise Name */}
+        {/* Display Exercise Details */}
         <Text style={styles.exerciseName}>{item.name}</Text>
-        {/* Display Sets, Reps, and Weight */}
         <Text style={styles.details}>
           {item.sets} sets x {item.reps} reps @ {item.weight} kg
         </Text>
@@ -28,20 +22,11 @@ const WorkoutList = ({ workouts, onSelect }) => {
     </TouchableOpacity>
   );
 
-  if (!workouts.length) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>
-          No exercises available. Add one to get started!
-        </Text>
-      </View>
-    );
-  }
-
+  //Views
   return (
     <FlatList
-      data={workouts} // Data passed from WorkoutScreen
-      keyExtractor={(item) => item.id.toString()} // Ensure unique keys
+      data={workouts}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={renderItem}
     />
   );
@@ -51,42 +36,25 @@ const styles = StyleSheet.create({
   listItem: {
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.inputBorder,
-    backgroundColor: COLORS.inputBackground,
-    borderRadius: 8,
-    marginVertical: 5,
-    marginHorizontal: 10,
-    elevation: 2, // Shadow for Android
-    shadowColor: COLORS.bodyText, // Shadow for iOS
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  listItemPressed: {
-    backgroundColor: COLORS.buttonBackground, // Highlight color on press
+    borderBottomColor: COLORS.border,
+    backgroundColor: COLORS.background,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   exerciseName: {
-    ...FONTS.body,
-    fontWeight: "bold",
     fontSize: 18,
-    marginBottom: 5,
+    fontWeight: "bold",
+    color: COLORS.primaryText,
   },
   details: {
-    ...FONTS.body,
     fontSize: 14,
-    color: COLORS.mutedText,
+    color: COLORS.primaryText,
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  emptyText: {
-    ...FONTS.body,
-    fontSize: 16,
-    color: COLORS.mutedText,
-    textAlign: "center",
+  modify: {
+    color: COLORS.buttonBackground,
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });
 

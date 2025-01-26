@@ -20,19 +20,22 @@ const WorkoutNavigator = () => {
       <WorkoutStack.Screen
         name="WorkoutScreen"
         component={WorkoutScreen}
-        options={{ title: "StrengthLink" }}
+        options={{ title: "Workout" }}
       />
 
       <WorkoutStack.Screen
         name="AddExerciseScreen"
         component={AddExerciseScreen}
-        options={{ title: "Add Exercise" }}
+        options={{ title: "Add Exercise", headerBackTitleVisible: false }}
       />
 
       <WorkoutStack.Screen
         name="ExerciseViewScreen"
         component={ExerciseViewScreen}
-        options={{ title: "View Exercise Details" }}
+        options={{
+          title: "View Exercise Details",
+          headerBackTitleVisible: false,
+        }}
       />
     </WorkoutStack.Navigator>
   );

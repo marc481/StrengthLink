@@ -6,7 +6,7 @@ export const COLORS = {
 
   // Text
   headerText: "#FFFFFF", // White for header text
-  bodyText: "#000000", // Black for general text
+  bodyText: "#002B5B", // Black for general text
   mutedText: "#5F5F5F", // Grey for secondary text
   infoHighlight: "#4A90E2", // Light blue for highlighted info text
 
