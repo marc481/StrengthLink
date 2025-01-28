@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   header: {
     ...FONTS.header,
     marginBottom: SPACING.large,
+    alignItems: "center",
   },
   buttonContainer: {
     flexDirection: "row",
