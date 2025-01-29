@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import Screen from "../layout/Screen";
-import WorkoutView from "../entity/WorkoutView";
+import WorkoutView from "../entity/workouts/WorkoutView";
 
 const ExerciseViewScreen = ({ route, navigation }) => {
   // Initialisaliations

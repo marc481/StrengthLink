@@ -1,5 +1,5 @@
 import React from "react";
-import WorkoutForm from "../entity/WorkoutForm";
+import WorkoutForm from "../entity/workouts/WorkoutForm";
 import Screen from "../layout/Screen";
 
 // AddExerciseScreen Component

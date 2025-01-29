@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View, Alert } from "react-native";
-import { Button, ButtonTray } from "../UI/Button";
-import { COLORS, FONTS, SPACING } from "../../config/theme";
-import Icons from "../UI/icons";
+import { Button, ButtonTray } from "../../UI/Button";
+import { COLORS, FONTS, SPACING } from "../../../config/theme";
+import Icons from "../../UI/icons";
 
 const WorkoutView = ({ workout, onDelete, onModify }) => {
   // Handlers ---------------------------

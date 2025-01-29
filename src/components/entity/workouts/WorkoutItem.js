@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { COLORS, FONTS, SPACING } from "../../config/theme";
+import { COLORS, FONTS, SPACING } from "../../../config/theme";
 
 const WorkoutItem = ({ workout, onSelect }) => {
   //Initialisaliations

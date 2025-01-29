@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { COLORS } from "../../config/theme";
+import { COLORS } from "../../../config/theme";
 
 const WorkoutList = ({ workouts, onSelect, onModify }) => {
   //Initialisaliations

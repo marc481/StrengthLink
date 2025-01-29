@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Form from "../UI/Form";
-import Icons from "../UI/icons";
+import Form from "../../UI/Form";
+import Icons from "../../UI/icons";
 
 const defaultExercise = {
   id: null,
