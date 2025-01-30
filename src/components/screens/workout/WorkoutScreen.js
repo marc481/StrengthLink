@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import Screen from "../layout/Screen";
-import WorkoutList from "../entity/workouts/WorkoutList";
-import { Button, ButtonTray } from "../UI/Button";
-import { COLORS } from "../../config/theme";
-import workout from "../../data/workout";
+import Screen from "../../layout/Screen";
+import WorkoutList from "../../entity/workouts/WorkoutList";
+import { Button, ButtonTray } from "../../UI/Button";
+import { COLORS } from "../../../config/theme";
+import workout from "../../../data/workout";
 
 const WorkoutScreen = ({ navigation }) => {
   //Initialisaliations

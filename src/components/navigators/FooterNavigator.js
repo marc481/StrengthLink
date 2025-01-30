@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import WorkoutNavigator from "./WorkoutNavigator";
-import SocialScreen from "../screens/SocialScreen";
-import ProgressScreen from "../screens/ProgressScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import HomeScreen from "../screens/HomeScreen";
+import SocialScreen from "../screens/social/SocialScreen";
+import ProgressScreen from "../screens/progress/ProgressScreen";
+import ProfileScreen from "../screens/profile/ProfileScreen";
+import HomeScreen from "../screens/home/HomeScreen";
 import { COLORS } from "../../config/theme";
 import Icons from "../UI/icons";
 

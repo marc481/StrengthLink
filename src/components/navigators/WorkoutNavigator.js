@@ -1,8 +1,8 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AddExerciseScreen from "../screens/AddExerciseScreen";
-import WorkoutScreen from "../screens/WorkoutScreen";
-import ExerciseViewScreen from "../screens/ExerciseViewScreen";
+import AddExerciseScreen from "../screens/workout/AddExerciseScreen";
+import WorkoutScreen from "../screens/workout/WorkoutScreen";
+import ExerciseViewScreen from "../screens/workout/ExerciseViewScreen";
 import { COLORS } from "../../config/theme";
 
 const WorkoutStack = createNativeStackNavigator();

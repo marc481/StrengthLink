@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { COLORS, FONTS, SPACING } from "../../config/theme";
-import Icons from "../UI/icons";
+import { COLORS, FONTS, SPACING } from "../../../config/theme";
+import Icons from "../../UI/icons";
 
 const HomeScreen = ({ navigation }) => {
   return (
