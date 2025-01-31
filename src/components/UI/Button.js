@@ -1,38 +1,57 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native"; // Ensure View is imported
-import { COLORS, FONTS } from "../../config/theme";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { COLORS, FONTS, SPACING } from "../../config/theme";
 
-export const Button = ({ label, onPress, styleLabel, styleButton }) => {
+// Button Component
+const Button = ({ label, onPress, variant = "default" }) => {
+  const getButtonStyle = () => {
+    switch (variant) {
+      case "delete":
+        return [styles.button, styles.deleteButton];
+      case "primary":
+        return [styles.button, styles.primaryButton];
+      default:
+        return [styles.button];
+    }
+  };
+
   return (
-    <Pressable onPress={onPress} style={[styles.button, styleButton]}>
-      <Text style={[styles.label, styleLabel]}>{label}</Text>
-    </Pressable>
+    <TouchableOpacity style={getButtonStyle()} onPress={onPress}>
+      <Text style={styles.text}>{label}</Text>
+    </TouchableOpacity>
   );
 };
 
-export const ButtonTray = ({ children, style }) => {
-  return <View style={[styles.tray, style]}>{children}</View>;
+// ButtonTray Component
+const ButtonTray = ({ children }) => {
+  return <View style={styles.buttonTray}>{children}</View>;
 };
 
+// Styles
 const styles = StyleSheet.create({
   button: {
-    minHeight: 50,
-    borderRadius: 7,
-    backgroundColor: COLORS.buttonBackground, // Sky blue
+    padding: SPACING.medium,
+    borderRadius: SPACING.small,
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
-    flexDirection: "row",
+    backgroundColor: COLORS.buttonBackground,
   },
-  label: {
-    ...FONTS.button, // Use bold button font
-    color: COLORS.buttonText, // White text
+  primaryButton: {
+    backgroundColor: COLORS.primary,
   },
-  tray: {
+  deleteButton: {
+    backgroundColor: COLORS.error, // Should be red
+  },
+  text: {
+    ...FONTS.body,
+    color: COLORS.buttonText,
+  },
+  buttonTray: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 10, // For spacing between buttons
+    justifyContent: "center",
+    gap: SPACING.small,
   },
 });
 
-export default Button;
+// Export both Button & ButtonTray
+export { Button, ButtonTray };

@@ -5,16 +5,17 @@ export const COLORS = {
   footerBackground: "#002B5B", // Dark blue for footer navigation
 
   // Text
-  headerText: "#FFFFFF", // White for header text
-  bodyText: "#002B5B", // Black for general text
+  headerText: "#F9EBD7", // White for header text
+  bodyText: "#003049", //
   mutedText: "#5F5F5F", // Grey for secondary text
   infoHighlight: "#4A90E2", // Light blue for highlighted info text
 
   // Buttons
-  buttonBackground: "#4A90E2", // Light blue for buttons
+  buttonBackground: "#669BBC", // Light blue for buttons
   buttonText: "#FFFFFF", // White for button text
-  buttonDangerBackground: "#FFC0CB", // Misty rose for danger buttons
-  buttonDangerText: "#FF0000", // Red for danger button text
+  buttonDangerBackground: "#DC3545", // 🔥 RED for delete buttons
+  buttonDangerText: "#FFFFFF", // White text for delete buttons
+  error: "#DC3545", // 🔥 RED (keep it consistent)
 
   // Footer Tabs
   footerActiveText: "#FFFFFF", // White for active tab

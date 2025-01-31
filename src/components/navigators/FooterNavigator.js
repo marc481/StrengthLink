@@ -7,6 +7,7 @@ import ProfileScreen from "../screens/profile/ProfileScreen";
 import HomeScreen from "../screens/home/HomeScreen";
 import { COLORS } from "../../config/theme";
 import Icons from "../UI/icons";
+import SocialNavigator from "./SocialNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,12 +51,13 @@ const FooterNavigator = () => {
       {/* Social Tab */}
       <Tab.Screen
         name="Social"
-        component={SocialScreen}
+        component={SocialNavigator}
         options={{
           title: "Socials",
           tabBarIcon: ({ color, size }) => (
             <Icons.Social color={color} size={size} />
           ),
+          headerShown: true,
         }}
       />
 
