@@ -30,12 +30,12 @@ const users = [
   },
   {
     UserID: "4",
-    UserFirstName: "Emily",
-    UserLastName: "Clark",
-    UserName: "emilyclark",
-    UserEmail: "emilyclark@example.com",
+    UserFirstName: "Drake",
+    UserLastName: "Nabeel",
+    UserName: "LilDrake",
+    UserEmail: "ilovediddy@example.com",
     Password: "securepassword",
-    UserImageURL: "https://via.placeholder.com/150", // Placeholder image
+    UserImageURL: "https://i.postimg.cc/cHkrmjw3/SNV32322-2.jpg",
   },
 ];
 
