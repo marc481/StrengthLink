@@ -1,3 +1,4 @@
+import React from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -17,7 +18,6 @@ const Form = ({ children, onSubmit, onCancel, submitLabel, submitIcon }) => {
       <ScrollView contentContainerStyle={styles.formItems}>
         {children}
       </ScrollView>
-
       <ButtonTray>
         <Button label={submitLabel} icon={submitIcon} onPress={onSubmit} />
         <Button label="Cancel" icon={<Icons.Delete />} onPress={onCancel} />
@@ -44,7 +44,6 @@ const InputSelect = ({ label, prompt, options, value, onChange }) => {
   return (
     <View style={styles.item}>
       <Text style={styles.itemLabel}>{label}</Text>
-
       <Picker
         mode="dropdown"
         selectedValue={value}
@@ -64,7 +63,6 @@ const InputSelect = ({ label, prompt, options, value, onChange }) => {
   );
 };
 
-// Compose Components
 Form.InputText = InputText;
 Form.InputSelect = InputSelect;
 

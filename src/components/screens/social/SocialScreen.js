@@ -3,30 +3,32 @@ import { StyleSheet, TextInput, View, TouchableOpacity } from "react-native";
 import UserList from "../../entity/users/UserList";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
 import Icons from "../../UI/icons";
-import initialUsers from "../../../data/users";
 
 const SocialScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [friends, setFriends] = useState(initialUsers);
+  const [friends, setFriends] = useState([]); // Stores only added friends
 
-  // Handlers
-  const handleSearch = () => {
-    const filteredFriends = initialUsers.filter(
-      (friend) =>
-        friend.UserFirstName.toLowerCase().includes(
-          searchQuery.toLowerCase()
-        ) ||
-        friend.UserLastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        friend.UserName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFriends(filteredFriends);
-  };
-
+  // Navigate to Add Friend Screen
   const gotoAddFriendScreen = () => {
     navigation.navigate("AddFriendScreen", {
-      onAddFriend: (newFriend) => setFriends((prev) => [...prev, newFriend]),
+      onAddFriend: (newFriend) => {
+        setFriends((prev) => {
+          if (!prev.some((f) => f.UserID === newFriend.UserID)) {
+            return [...prev, newFriend];
+          }
+          return prev;
+        });
+      },
     });
   };
+
+  // Filter friends list for display
+  const filteredFriends = friends.filter(
+    (friend) =>
+      friend.UserFirstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      friend.UserLastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      friend.UserName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleSelectFriend = (friend) => {
     navigation.navigate("FriendDetailScreen", {
@@ -40,6 +42,7 @@ const SocialScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* 🔍 Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -47,14 +50,16 @@ const SocialScreen = ({ navigation }) => {
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+        <TouchableOpacity style={styles.searchButton}>
           <Icons.Search color={COLORS.buttonBackground} size={24} />
         </TouchableOpacity>
         <TouchableOpacity onPress={gotoAddFriendScreen}>
           <Icons.Add color={COLORS.buttonBackground} size={24} />
         </TouchableOpacity>
       </View>
-      <UserList users={friends} onSelect={handleSelectFriend} />
+
+      {/* List of Friends */}
+      <UserList users={filteredFriends} onSelect={handleSelectFriend} />
     </View>
   );
 };
@@ -84,16 +89,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     borderRadius: SPACING.small,
     marginRight: SPACING.small,
-  },
-  addButton: {
-    padding: SPACING.small,
-    backgroundColor: COLORS.secondary,
-    borderRadius: SPACING.small,
-  },
-  sectionHeader: {
-    ...FONTS.header,
-    marginBottom: SPACING.small,
-    color: COLORS.primaryText,
   },
 });
 

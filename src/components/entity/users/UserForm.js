@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
-import Icons from "../../UI/icons";
 import Form from "../../UI/Form";
-import { COLORS } from "../../../config/theme";
+import Icons from "../../UI/icons.js";
+
 const defaultUser = {
   UserID: null,
   UserFirstName: "",
@@ -13,16 +12,14 @@ const defaultUser = {
 };
 
 const UserForm = ({ originalUser, onSubmit, onCancel, type = "signup" }) => {
-  //Intialisations
   const [user, setUser] = useState(originalUser || { ...defaultUser });
 
-  //Handlers
   const handleChange = (field, value) => setUser({ ...user, [field]: value });
   const handleSubmit = () => onSubmit(user);
 
   const submitLabel = type === "signup" ? "Sign Up" : "Add Friend";
-  const submitIcon = type === "signup" ? <Icons.Add /> : <Icons.Friend />;
-  //View
+  const submitIcon = type === "signup" ? <Icons.Add /> : <Icons.User />;
+
   return (
     <Form
       onSubmit={handleSubmit}

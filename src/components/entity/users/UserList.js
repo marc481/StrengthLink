@@ -1,20 +1,51 @@
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import UserItem from "./UserItem";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { SPACING, COLORS, FONTS } from "../../../config/theme";
 
-const UserList = ({ users = [], onSelect }) => {
+const placeholderImage =
+  "https://cdn2.psychologytoday.com/assets/styles/manual_crop_16_9_1200x675/public/field_blog_entry_images/2018-09/shutterstock_648907024.jpg?itok=07tF_dnG"; // Fallback image
+
+const UserList = ({ users, onSelect }) => {
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.listContainer}>
       {users.map((user) => (
-        <UserItem key={user.UserID} user={user} onSelect={onSelect} />
+        <TouchableOpacity
+          key={user.UserID}
+          style={styles.userItem}
+          onPress={() => onSelect(user)}
+        >
+          <Image
+            source={{ uri: user.UserImageURL || placeholderImage }}
+            style={styles.avatar}
+          />
+          <Text style={styles.username}>{user.UserName}</Text>
+        </TouchableOpacity>
       ))}
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
+  listContainer: {
+    width: "100%",
+  },
+  userItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: SPACING.small,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.divider,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: SPACING.small,
+    backgroundColor: COLORS.inputBackground,
+  },
+  username: {
+    ...FONTS.body,
+    color: COLORS.bodyText,
   },
 });
 
