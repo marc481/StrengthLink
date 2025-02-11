@@ -1,13 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import WorkoutNavigator from "./WorkoutNavigator";
-import SocialScreen from "../screens/social/SocialScreen";
+import SocialNavigator from "./SocialNavigator";
 import ProgressScreen from "../screens/progress/ProgressScreen";
-import ProfileScreen from "../screens/profile/ProfileScreen";
 import HomeScreen from "../screens/home/HomeScreen";
+import ProfileNavigator from "./ProfileNavigator"; // ✅ Import Profile Navigator
 import { COLORS } from "../../config/theme";
 import Icons from "../UI/icons";
-import SocialNavigator from "./SocialNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -73,10 +72,10 @@ const FooterNavigator = () => {
         }}
       />
 
-      {/* Profile Tab */}
+      {/* Profile Tab (Use ProfileNavigator Instead of ProfileScreen) */}
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileNavigator} // ✅ Change from ProfileScreen to ProfileNavigator
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (

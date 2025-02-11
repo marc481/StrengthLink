@@ -35,24 +35,24 @@ const AddFriendScreen = ({ navigation, route }) => {
     navigation.goBack(); // ✅ Navigate back to SocialScreen
   };
 
-  // 🔹 Handle Add button
+  //  Handle Add button
   const handleAddFriend = () => {
     if (filteredUsers.length === 1) {
       handleSelectUser(filteredUsers[0]); // If exactly one result, add directly
     }
   };
 
-  // 🔹 Handle Cancel button
+  //  Handle Cancel button
   const handleCancel = () => {
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      {/* 🔹 Header */}
+      {/*  Header */}
       <Text style={styles.header}>Search Friends</Text>
 
-      {/* 🔹 Search Bar */}
+      {/*  Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -69,10 +69,10 @@ const AddFriendScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
 
-      {/* 🔹 Display Search Results */}
+      {/*  Display Search Results */}
       <UserList users={filteredUsers} onSelect={handleSelectUser} />
 
-      {/* 🔹 Buttons */}
+      {/*  Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.addButton} onPress={handleAddFriend}>
           <Text style={styles.addButtonText}>Add</Text>
