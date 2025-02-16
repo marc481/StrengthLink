@@ -1,62 +1,36 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
-import Screen from "../../layout/Screen";
+import React, { useContext } from "react";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import WorkoutList from "../../entity/workouts/WorkoutList";
-import { Button, ButtonTray } from "../../UI/Button";
-import { COLORS } from "../../../config/theme";
-import workout from "../../../data/workout";
+import { COLORS, SPACING, FONTS } from "../../../config/theme";
+import { WorkoutContext } from "../../../../App";
 
 const WorkoutScreen = ({ navigation }) => {
-  //Initialisaliations
-  const initialExercises = workout.exercises;
+  const { workouts, setWorkouts } = useContext(WorkoutContext);
 
-  //State
-  const [exercises, setExercises] = useState(initialExercises);
-
-  //Handlers
-  const handleAdd = (exercise) => {
-    setExercises([...exercises, { ...exercise, id: Date.now() }]);
+  // Save workout to context and persist in Excel
+  const handleAddWorkout = (newWorkout) => {
+    const updatedWorkouts = [...workouts, newWorkout];
+    setWorkouts(updatedWorkouts); // ✅ Update global state
   };
 
-  const handleDelete = (exerciseId) => {
-    setExercises(exercises.filter((exercise) => exercise.id !== exerciseId));
-  };
-
-  const handleModify = (updatedExercise) => {
-    setExercises(
-      exercises.map((exercise) =>
-        exercise.id === updatedExercise.id ? updatedExercise : exercise
-      )
-    );
-  };
-
-  const gotoAddScreen = () =>
-    navigation.navigate("AddExerciseScreen", {
-      onAdd: handleAdd,
-    });
-
-  const gotoViewScreen = (exercise) =>
-    navigation.navigate("ExerciseViewScreen", {
-      exercise,
-      onDelete: handleDelete,
-      onModify: (updatedExercise) => {
-        handleModify(updatedExercise);
-        navigation.goBack();
-      },
-    });
-
-  //Views
   return (
-    <Screen>
-      <ButtonTray>
-        <Button label="Add Exercise" onPress={gotoAddScreen} />
-      </ButtonTray>
-
+    <View style={styles.container}>
+      {/* Workout List */}
       <WorkoutList
-        workouts={exercises}
-        onSelect={gotoViewScreen} // Only this interaction is needed
+        workouts={workouts}
+        onSelect={(workout) => navigation.navigate("WorkoutView", { workout })}
       />
-    </Screen>
+
+      {/* Add Workout Button */}
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() =>
+          navigation.navigate("WorkoutForm", { onAdd: handleAddWorkout })
+        }
+      >
+        <Text style={styles.addButtonText}>+ Add Workout</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -64,6 +38,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    padding: SPACING.medium,
+  },
+  addButton: {
+    backgroundColor: COLORS.buttonBackground,
+    padding: SPACING.medium,
+    borderRadius: SPACING.small,
+    alignItems: "center",
+    marginTop: SPACING.large,
+  },
+  addButtonText: {
+    ...FONTS.button,
   },
 });
 

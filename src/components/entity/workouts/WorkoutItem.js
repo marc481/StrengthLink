@@ -1,36 +1,43 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { COLORS, FONTS, SPACING } from "../../../config/theme";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
 const WorkoutItem = ({ workout, onSelect }) => {
-  //Initialisaliations
-  //State
-  //Handlers
-  //Views
   return (
-    <Pressable onPress={() => onSelect(workout)}>
-      <View style={styles.item}>
-        <Text style={styles.name}>{workout.name}</Text>
-        <Texts style={styles.details}>
-          {workout.sets} sets x {workout.reps} reps @ {workout.weight} kg
-        </Texts>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => onSelect(workout)}
+    >
+      <View style={styles.info}>
+        <Text style={styles.date}>{workout.Date}</Text>
+        <Text style={styles.exercise}>
+          {workout.Exercise} - {workout.Sets}x{workout.Reps} @ {workout.Weight}
+          kg
+        </Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
+
 const styles = StyleSheet.create({
-  item: {
-    paddingVertical: SPACING.small,
-    paddingHorizontal: SPACING.medium,
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: SPACING.medium,
     borderBottomWidth: 1,
-    borderColor: COLORS.inputBorder,
+    borderBottomColor: COLORS.divider,
   },
-  name: {
+  info: {
+    flex: 1,
+  },
+  date: {
     ...FONTS.body,
     fontWeight: "bold",
+    color: COLORS.primaryText,
   },
-  details: {
-    ...FONTS.muted,
+  exercise: {
+    ...FONTS.body,
+    color: COLORS.secondaryText,
   },
 });
 
