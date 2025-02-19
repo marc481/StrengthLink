@@ -8,20 +8,15 @@ import {
 } from "react-native";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
-const AddExerciseScreen = ({ navigation, route }) => {
-  const { onAddExercise } = route.params || {};
+const ExerciseModifyScreen = ({ navigation, route }) => {
+  const { exercise, onModifyExercise } = route.params || {};
 
-  // State for new exercise
-  const [exercise, setExercise] = useState({
-    ExerciseName: "",
-    Sets: "",
-    Reps: "",
-    Weight: "",
-  });
+  // Exercise state
+  const [updatedExercise, setUpdatedExercise] = useState({ ...exercise });
 
   // Handle input change
   const handleChange = (field, value) => {
-    setExercise((prev) => ({
+    setUpdatedExercise((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -29,35 +24,25 @@ const AddExerciseScreen = ({ navigation, route }) => {
 
   // Save Exercise
   const handleSave = () => {
-    if (!exercise.ExerciseName.trim()) {
-      alert("Exercise name cannot be empty!");
-      return;
-    }
-
-    if (onAddExercise) {
-      onAddExercise(exercise);
-    } else {
-      console.error("❌ Error: `onAddExercise` function is missing!");
-    }
-
+    onModifyExercise(updatedExercise);
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Add Exercise</Text>
+      <Text style={styles.header}>Edit Exercise</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Exercise Name"
-        value={exercise.ExerciseName}
+        value={updatedExercise.ExerciseName}
         onChangeText={(value) => handleChange("ExerciseName", value)}
       />
 
       <TextInput
         style={styles.input}
         placeholder="Sets"
-        value={exercise.Sets}
+        value={updatedExercise.Sets}
         onChangeText={(value) => handleChange("Sets", value)}
         keyboardType="numeric"
       />
@@ -65,7 +50,7 @@ const AddExerciseScreen = ({ navigation, route }) => {
       <TextInput
         style={styles.input}
         placeholder="Reps"
-        value={exercise.Reps}
+        value={updatedExercise.Reps}
         onChangeText={(value) => handleChange("Reps", value)}
         keyboardType="numeric"
       />
@@ -73,13 +58,13 @@ const AddExerciseScreen = ({ navigation, route }) => {
       <TextInput
         style={styles.input}
         placeholder="Weight (kg/lbs)"
-        value={exercise.Weight}
+        value={updatedExercise.Weight}
         onChangeText={(value) => handleChange("Weight", value)}
         keyboardType="numeric"
       />
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.buttonText}>Save Exercise</Text>
+        <Text style={styles.buttonText}>Save Changes</Text>
       </TouchableOpacity>
     </View>
   );
@@ -90,7 +75,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     padding: SPACING.large,
-    justifyContent: "center",
   },
   header: {
     ...FONTS.header,
@@ -120,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddExerciseScreen;
+export default ExerciseModifyScreen;

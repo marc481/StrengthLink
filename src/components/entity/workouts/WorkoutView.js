@@ -1,27 +1,24 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
+import ExerciseItem from "../exercise/ExerciseItem";
 
 const WorkoutView = ({ workout }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Workout on {workout.Date}</Text>
+      <Text style={styles.header}>{workout.WorkoutName}</Text>
+      <Text style={styles.date}>Workout Date: {workout.WorkoutDate}</Text>
 
-      {/* List Exercises in this Workout */}
+      {/* Exercises inside the workout */}
       <FlatList
-        data={workout.exercises}
+        data={workout.Exercises}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Text style={styles.exercise}>
-            {item.Exercise} - {item.Sets}x{item.Reps} @ {item.Weight}kg
-          </Text>
-        )}
+        renderItem={({ item }) => <ExerciseItem exercise={item} />}
       />
     </View>
   );
 };
 
-// 🎨 Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -33,10 +30,10 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.medium,
     color: COLORS.primaryText,
   },
-  exercise: {
+  date: {
     ...FONTS.body,
     color: COLORS.bodyText,
-    paddingVertical: SPACING.small,
+    paddingBottom: SPACING.small,
   },
 });
 

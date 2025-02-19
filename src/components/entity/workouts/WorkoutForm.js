@@ -5,17 +5,19 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  FlatList,
 } from "react-native";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
+import ExerciseItem from "../exercise/ExerciseItem";
 
 const WorkoutForm = ({ navigation, route }) => {
-  const { onAdd } = route.params || {};
+  const { onAddWorkout } = route.params || {};
 
   // Workout state
   const [workout, setWorkout] = useState({
     WorkoutName: "",
     WorkoutDate: new Date().toISOString().split("T")[0],
-    Exercises: [],
+    Exercises: [], // Stores linked exercises
   });
 
   // Handle input change
@@ -27,7 +29,7 @@ const WorkoutForm = ({ navigation, route }) => {
   const handleAddExercise = (exercise) => {
     setWorkout((prev) => ({
       ...prev,
-      Exercises: [...prev.Exercises, exercise], // ✅ Store exercises in workout
+      Exercises: [...prev.Exercises, exercise], // ✅ Store exercises inside workout
     }));
   };
 
@@ -38,9 +40,8 @@ const WorkoutForm = ({ navigation, route }) => {
       return;
     }
 
-    onAdd(workout); // ✅ Save workout with exercises
-
-    navigation.goBack(); // ✅ Go back to WorkoutScreen
+    onAddWorkout(workout); // ✅ Save workout with exercises
+    navigation.goBack();
   };
 
   return (
@@ -58,13 +59,20 @@ const WorkoutForm = ({ navigation, route }) => {
       {/* Workout Date */}
       <Text style={styles.label}>Workout Date: {workout.WorkoutDate}</Text>
 
-      {/* Buttons Container */}
+      {/* Added Exercises List */}
+      <FlatList
+        data={workout.Exercises}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <ExerciseItem exercise={item} />}
+      />
+
+      {/* Buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.addExerciseButton}
           onPress={() =>
-            navigation.navigate("AddExerciseScreen", {
-              onAddExercise: handleAddExercise,
+            navigation.navigate("ExerciseForm", {
+              onAdd: handleAddExercise,
             })
           }
         >
