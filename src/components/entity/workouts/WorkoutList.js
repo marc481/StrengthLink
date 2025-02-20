@@ -1,43 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import WorkoutItem from "./WorkoutItem";
 import { COLORS, SPACING } from "../../../config/theme";
-import * as FileSystem from "expo-file-system";
-import * as XLSX from "xlsx";
-
-const filePath = FileSystem.documentDirectory + "workouts.xlsx";
+import { WorkoutContext } from "../../../../App";
 
 const WorkoutList = ({ onSelect }) => {
-  // State for Workouts
-  const [workouts, setWorkouts] = useState([]);
-
-  // Load workouts from Excel when screen loads
-  useEffect(() => {
-    loadWorkouts();
-  }, []);
-
-  const loadWorkouts = async () => {
-    try {
-      const file = await FileSystem.readAsStringAsync(filePath, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      const workbook = XLSX.read(file, { type: "base64" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(sheet);
-
-      setWorkouts(data);
-    } catch (error) {
-      console.log("Error loading workouts:", error);
-    }
-  };
+  const { workouts } = useContext(WorkoutContext);
 
   return (
     <View style={styles.container}>
       <FlatList
         data={workouts}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.WorkoutID.toString()}
         renderItem={({ item }) => (
-          <WorkoutItem workout={item} onSelect={onSelect} />
+          <WorkoutItem
+            workout={{ ...item, Exercises: item.Exercises || [] }}
+            onSelect={onSelect}
+          />
         )}
       />
     </View>

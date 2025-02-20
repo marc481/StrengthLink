@@ -11,7 +11,16 @@ import { WorkoutContext } from "../../../../App";
 
 const WorkoutModifyScreen = ({ navigation, route }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
-  const { workout, onModifyWorkout } = route.params || {}; // Ensure we receive `onModifyWorkout`
+  const { workout } = route.params;
+
+  if (!workout || !workout.WorkoutID) {
+    console.error("❌ Workout is undefined or missing WorkoutID:", workout);
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Workout not found.</Text>
+      </View>
+    );
+  }
 
   const [updatedWorkout, setUpdatedWorkout] = useState({ ...workout });
 
@@ -30,15 +39,8 @@ const WorkoutModifyScreen = ({ navigation, route }) => {
       return;
     }
 
-    if (onModifyWorkout) {
-      onModifyWorkout(updatedWorkout); // Update workout
-    } else {
-      console.error("Error: `onModifyWorkout` function is missing!");
-    }
-
-    // Update global workouts state
     const updatedWorkouts = workouts.map((w) =>
-      w.WorkoutID === workout.WorkoutID ? updatedWorkout : w
+      w.WorkoutID === workout.WorkoutID ? { ...w, ...updatedWorkout } : w
     );
 
     setWorkouts(updatedWorkouts);
@@ -71,11 +73,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     padding: SPACING.large,
   },
-  header: {
-    ...FONTS.header,
-    textAlign: "center",
-    marginBottom: SPACING.large,
-  },
+  errorText: { ...FONTS.body, textAlign: "center", color: "red" },
+  header: { ...FONTS.header, textAlign: "center", marginBottom: SPACING.large },
   input: {
     width: "100%",
     borderWidth: 1,
@@ -86,10 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: SPACING.medium,
   },
-  label: {
-    ...FONTS.body,
-    marginBottom: SPACING.medium,
-  },
+  label: { ...FONTS.body, marginBottom: SPACING.medium },
   saveButton: {
     backgroundColor: COLORS.buttonBackground,
     paddingVertical: SPACING.medium,
@@ -97,10 +93,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: SPACING.large,
   },
-  buttonText: {
-    ...FONTS.button,
-    color: COLORS.buttonText,
-  },
+  buttonText: { ...FONTS.button, color: COLORS.buttonText },
 });
 
 export default WorkoutModifyScreen;

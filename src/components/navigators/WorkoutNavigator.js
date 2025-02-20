@@ -6,7 +6,6 @@ import WorkoutAddScreen from "../screens/workout/WorkoutAddScreen";
 import WorkoutModifyScreen from "../screens/workout/WorkoutModifyScreen";
 import WorkoutViewScreen from "../screens/workout/WorkoutViewScreen";
 
-import ExerciseListScreen from "../screens/exercise/ExericseListScreen";
 import ExerciseAddScreen from "../screens/exercise/ExerciseAddScreen";
 import ExerciseModifyScreen from "../screens/exercise/ExerciseModifyScreen";
 import ExerciseViewScreen from "../screens/exercise/ExerciseViewScreen";
@@ -43,15 +42,11 @@ const WorkoutNavigator = () => {
       <Stack.Screen
         name="WorkoutViewScreen"
         component={WorkoutViewScreen}
-        options={{ title: "Workout Details" }}
+        options={{ title: "Workout View" }}
       />
 
       {/* Exercise Screens */}
-      <Stack.Screen
-        name="ExerciseListScreen"
-        component={ExerciseListScreen}
-        options={{ title: "Workout Exercises" }}
-      />
+
       <Stack.Screen
         name="ExerciseAddScreen"
         component={ExerciseAddScreen}

@@ -11,7 +11,7 @@ const ExerciseItem = ({ exercise, onSelect }) => {
       <View style={styles.info}>
         <Text style={styles.exerciseName}>{exercise.ExerciseName}</Text>
         <Text style={styles.details}>
-          {exercise.Sets}x{exercise.Reps} @ {exercise.Weight}kg
+          {exercise.Sets} x {exercise.Reps} @ {exercise.Weight} kg
         </Text>
       </View>
     </TouchableOpacity>
@@ -26,9 +26,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.divider,
   },
-  info: {
-    flex: 1,
-  },
+  info: { flex: 1 },
   exerciseName: {
     ...FONTS.body,
     fontWeight: "bold",

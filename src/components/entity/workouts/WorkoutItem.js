@@ -2,17 +2,20 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
-const WorkoutItem = ({ workout, onSelect }) => {
+const ExerciseItem = ({ exercise, onSelect }) => {
+  if (!exercise || !exercise.ExerciseName) {
+    return null; // Prevents rendering if the exercise is invalid
+  }
+
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => onSelect(workout)}
+      onPress={() => onSelect(exercise)}
     >
       <View style={styles.info}>
-        <Text style={styles.workoutName}>{workout.WorkoutName}</Text>
-        <Text style={styles.date}>{workout.WorkoutDate}</Text>
-        <Text style={styles.exerciseCount}>
-          {workout.Exercises.length} Exercises
+        <Text style={styles.exerciseName}>{exercise.ExerciseName}</Text>
+        <Text style={styles.details}>
+          {exercise.Sets} x {exercise.Reps} @ {exercise.Weight} kg
         </Text>
       </View>
     </TouchableOpacity>
@@ -27,22 +30,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.divider,
   },
-  info: {
-    flex: 1,
-  },
-  workoutName: {
+  info: { flex: 1 },
+  exerciseName: {
     ...FONTS.body,
     fontWeight: "bold",
     color: COLORS.primaryText,
   },
-  date: {
+  details: {
     ...FONTS.body,
     color: COLORS.secondaryText,
   },
-  exerciseCount: {
-    ...FONTS.caption,
-    color: COLORS.mutedText,
-  },
 });
 
-export default WorkoutItem;
+export default ExerciseItem;

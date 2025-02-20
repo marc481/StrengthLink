@@ -1,111 +1,90 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
-import * as FileSystem from "expo-file-system";
-import * as XLSX from "xlsx";
+import { WorkoutContext } from "../../../../App";
+import ExerciseItem from "../../entity/workouts/WorkoutItem";
 
-const filePath = FileSystem.documentDirectory + "workouts.xlsx";
+const WorkoutViewScreen = ({ route, navigation }) => {
+  const { workouts, setWorkouts } = useContext(WorkoutContext);
+  const workoutID = route?.params?.workoutID;
 
-const ExerciseViewScreen = ({ route, navigation }) => {
-  // Get selected workout
-  const { workout } = route.params;
+  if (!workoutID) {
+    console.error("❌ Missing workoutID in WorkoutViewScreen");
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Workout not found.</Text>
+      </View>
+    );
+  }
 
-  // State for exercises
-  const [exercises, setExercises] = useState(workout.exercises || []);
+  // Find the correct workout using workoutID
+  const selectedWorkout = workouts.find((w) => w.WorkoutID === workoutID);
+
+  if (!selectedWorkout) {
+    console.error("❌ Workout not found in state:", workoutID);
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Workout not found.</Text>
+      </View>
+    );
+  }
+
+  const [exercises, setExercises] = useState(selectedWorkout.Exercises);
 
   useEffect(() => {
-    loadExercises();
-  }, []);
+    console.log("📌 Loaded Workout:", selectedWorkout);
+  }, [selectedWorkout]);
 
-  //  Load exercises from Excel
-  const loadExercises = async () => {
-    try {
-      const file = await FileSystem.readAsStringAsync(filePath, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      const workbook = XLSX.read(file, { type: "base64" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(sheet);
+  // Function to add an exercise
+  const handleAddExercise = (newExercise) => {
+    const updatedExercises = [...exercises, newExercise];
 
-      const updatedWorkout = data.find(
-        (w) => w.WorkoutID === workout.WorkoutID
-      );
-      setExercises(updatedWorkout?.exercises || []);
-    } catch (error) {
-      console.log("Error loading exercises:", error);
-    }
-  };
+    // Update workouts list
+    const updatedWorkouts = workouts.map((w) =>
+      w.WorkoutID === selectedWorkout.WorkoutID
+        ? { ...w, Exercises: updatedExercises }
+        : w
+    );
 
-  // Delete an exercise
-  const handleDeleteExercise = async (exerciseName) => {
-    Alert.alert("Delete Exercise", `Remove ${exerciseName}?`, [
-      { text: "Cancel" },
-      {
-        text: "Delete",
-        onPress: async () => {
-          const updatedExercises = exercises.filter(
-            (e) => e.name !== exerciseName
-          );
-          setExercises(updatedExercises);
-
-          await saveExercises(updatedExercises);
-        },
-      },
-    ]);
-  };
-
-  //  Save exercises to Excel
-  const saveExercises = async (updatedExercises) => {
-    try {
-      const file = await FileSystem.readAsStringAsync(filePath, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      const workbook = XLSX.read(file, { type: "base64" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(sheet);
-
-      const updatedWorkouts = data.map((w) =>
-        w.WorkoutID === workout.WorkoutID
-          ? { ...w, exercises: updatedExercises }
-          : w
-      );
-
-      const worksheet = XLSX.utils.json_to_sheet(updatedWorkouts);
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Workouts");
-      const fileContent = XLSX.write(workbook, { type: "base64" });
-
-      await FileSystem.writeAsStringAsync(filePath, fileContent, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-    } catch (error) {
-      console.log("Error saving exercises:", error);
-    }
+    setWorkouts(updatedWorkouts);
+    setExercises(updatedExercises);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{workout.WorkoutName}</Text>
+      <Text style={styles.header}>{selectedWorkout.WorkoutName}</Text>
+      <Text style={styles.label}>
+        Date: {selectedWorkout.WorkoutDate || "N/A"}
+      </Text>
 
-      {/* List of Exercises */}
-      {exercises.map((exercise, index) => (
-        <View key={index} style={styles.exerciseItem}>
-          <Text style={styles.exerciseText}>{exercise.name}</Text>
-          <Text style={styles.exerciseText}>
-            {exercise.sets} sets x {exercise.reps} reps - {exercise.weight}kg
-          </Text>
-          <TouchableOpacity onPress={() => handleDeleteExercise(exercise.name)}>
-            <Text style={styles.deleteButton}>❌</Text>
+      {/* Exercise List */}
+      <FlatList
+        data={exercises}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ExerciseViewScreen", { exercise: item })
+            }
+          >
+            <ExerciseItem exercise={item} />
           </TouchableOpacity>
-        </View>
-      ))}
+        )}
+      />
 
-      {/* Add Exercise */}
+      {/* Add Exercise Button */}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() =>
-          navigation.navigate("AddExerciseScreen", {
-            workout,
-            onSave: setExercises,
+          navigation.navigate("ExerciseAddScreen", {
+            workoutID: workoutID, // ✅ Pass the workout ID for reference
+            onAdd: handleAddExercise,
           })
         }
       >
@@ -121,35 +100,21 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     padding: SPACING.medium,
   },
-  header: {
-    ...FONTS.header,
-    marginBottom: SPACING.medium,
+  errorText: {
+    ...FONTS.body,
     textAlign: "center",
+    color: "red",
   },
-  exerciseItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: SPACING.small,
-    backgroundColor: COLORS.inputBackground,
-    marginBottom: SPACING.small,
-    borderRadius: 8,
-  },
-  exerciseText: {
-    ...FONTS.body,
-  },
-  deleteButton: {
-    ...FONTS.body,
-    color: COLORS.buttonDangerBackground,
-  },
+  header: { ...FONTS.header, marginBottom: SPACING.medium },
+  label: { ...FONTS.body, marginBottom: SPACING.medium },
   addButton: {
     backgroundColor: COLORS.buttonBackground,
     padding: SPACING.medium,
     borderRadius: SPACING.small,
     alignItems: "center",
+    marginTop: SPACING.large,
   },
-  addButtonText: {
-    ...FONTS.button,
-  },
+  addButtonText: { ...FONTS.button },
 });
 
-export default ExerciseViewScreen;
+export default WorkoutViewScreen;

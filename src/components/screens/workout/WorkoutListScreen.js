@@ -1,8 +1,14 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
-import { COLORS, SPACING, FONTS } from "../../../config/theme";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import { WorkoutContext } from "../../../../App";
 import WorkoutItem from "../../entity/workouts/WorkoutItem";
+import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
 const WorkoutListScreen = ({ navigation }) => {
   const { workouts } = useContext(WorkoutContext);
@@ -11,19 +17,20 @@ const WorkoutListScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.header}>Workouts</Text>
 
+      {/* Workout List */}
       {workouts.length > 0 ? (
-        workouts.map((workout, index) => (
-          <WorkoutItem
-            key={workout.WorkoutID || index} // ✅ Ensure unique key
-            workout={{
-              ...workout,
-              Exercises: workout.Exercises || [], // ✅ Ensure exercises exist
-            }}
-            onSelect={() =>
-              navigation.navigate("WorkoutViewScreen", { workout })
-            }
-          />
-        ))
+        <FlatList
+          data={workouts}
+          keyExtractor={(item) => item.WorkoutID.toString()}
+          renderItem={({ item }) => (
+            <WorkoutItem
+              workout={item}
+              onSelect={() =>
+                navigation.navigate("WorkoutViewScreen", { workout: item })
+              }
+            />
+          )}
+        />
       ) : (
         <Text style={styles.noWorkoutsText}>No workouts added yet.</Text>
       )}

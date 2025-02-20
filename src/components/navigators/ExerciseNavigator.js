@@ -1,6 +1,5 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ExerciseListScreen from "../screens/exercise/ExericseListScreen";
 import ExerciseAddScreen from "../screens/exercise/ExerciseAddScreen";
 import ExerciseModifyScreen from "../screens/exercise/ExerciseModifyScreen";
 import ExerciseViewScreen from "../screens/exercise/ExerciseViewScreen";
@@ -11,20 +10,13 @@ const ExerciseStack = createNativeStackNavigator();
 const ExerciseNavigator = () => {
   return (
     <ExerciseStack.Navigator
-      initialRouteName="ExerciseListScreen"
+      initialRouteName="ExerciseAddScreen" // ✅ FIXED: Set correct initial screen
       screenOptions={{
         headerStyle: { backgroundColor: COLORS.headerBackground },
         headerTintColor: COLORS.headerText,
         headerTitleAlign: "center",
       }}
     >
-      <ExerciseStack.Screen
-        name="ExerciseListScreen"
-        component={ExerciseListScreen}
-        options={{ title: "Workout Exercises" }}
-        initialParams={{ workout: null }} // Ensures workout param is forwarded
-      />
-
       <ExerciseStack.Screen
         name="ExerciseAddScreen"
         component={ExerciseAddScreen}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,10 +9,20 @@ import {
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
 const ExerciseModifyScreen = ({ navigation, route }) => {
-  const { exercise, onModifyExercise } = route.params || {};
+  const [updatedExercise, setUpdatedExercise] = useState(null);
+  const [modifyExercise, setModifyExercise] = useState(null);
 
-  // Exercise state
-  const [updatedExercise, setUpdatedExercise] = useState({ ...exercise });
+  useEffect(() => {
+    if (route.params?.exercise) {
+      setUpdatedExercise({ ...route.params.exercise });
+    } else {
+      console.error("❌ No exercise found in route params!");
+    }
+
+    if (route.params?.onModifyExercise) {
+      setModifyExercise(() => route.params.onModifyExercise); // ✅ Store safely
+    }
+  }, [route.params]);
 
   // Handle input change
   const handleChange = (field, value) => {
@@ -24,9 +34,27 @@ const ExerciseModifyScreen = ({ navigation, route }) => {
 
   // Save Exercise
   const handleSave = () => {
-    onModifyExercise(updatedExercise);
+    if (!updatedExercise || !updatedExercise.ExerciseName?.trim()) {
+      alert("Exercise name cannot be empty!");
+      return;
+    }
+
+    if (typeof modifyExercise === "function") {
+      modifyExercise(updatedExercise); // ✅ Call safely
+    } else {
+      console.error("❌ Error: `onModifyExercise` function is missing!");
+    }
+
     navigation.goBack();
   };
+
+  if (!updatedExercise) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Exercise not found.</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -76,11 +104,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     padding: SPACING.large,
   },
-  header: {
-    ...FONTS.header,
-    textAlign: "center",
-    marginBottom: SPACING.large,
-  },
+  header: { ...FONTS.header, textAlign: "center", marginBottom: SPACING.large },
+  errorText: { ...FONTS.body, textAlign: "center", color: "red" },
   input: {
     width: "100%",
     borderWidth: 1,
@@ -98,10 +123,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: SPACING.large,
   },
-  buttonText: {
-    ...FONTS.button,
-    color: COLORS.buttonText,
-  },
+  buttonText: { ...FONTS.button, color: COLORS.buttonText },
 });
 
 export default ExerciseModifyScreen;

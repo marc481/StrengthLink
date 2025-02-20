@@ -6,50 +6,52 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { COLORS, SPACING, FONTS } from "../../../config/theme";
 import { WorkoutContext } from "../../../../App";
+import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
 const WorkoutAddScreen = ({ navigation }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
-
-  const [workout, setWorkout] = useState({
-    WorkoutID: Date.now().toString(), // ✅ Unique ID
-    WorkoutName: "",
-    Exercises: [],
-  });
-
-  const handleChange = (field, value) => {
-    setWorkout((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const [workoutName, setWorkoutName] = useState("");
 
   const handleSaveWorkout = () => {
-    if (!workout.WorkoutName.trim()) {
+    if (!workoutName.trim()) {
       alert("Workout name cannot be empty!");
       return;
     }
 
-    const updatedWorkouts = [...workouts, workout];
-    setWorkouts(updatedWorkouts); // ✅ Saves to state & Excel
+    const newWorkout = {
+      WorkoutID: Date.now().toString(),
+      WorkoutName: workoutName,
+      WorkoutDate: new Date().toISOString().split("T")[0],
+      Exercises: [],
+    };
 
-    navigation.goBack(); // ✅ Return to WorkoutListScreen
+    setWorkouts([...workouts, newWorkout]);
+
+    console.log(
+      "✅ Navigating to WorkoutViewScreen with workoutID:",
+      newWorkout.WorkoutID
+    );
+
+    // ✅ Navigate to WorkoutViewScreen using workoutID, not full object
+    navigation.navigate("WorkoutViewScreen", {
+      workoutID: newWorkout.WorkoutID,
+    });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Add Workout</Text>
+      <Text style={styles.header}>Create Workout</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Workout Name"
-        value={workout.WorkoutName}
-        onChangeText={(value) => handleChange("WorkoutName", value)}
+        value={workoutName}
+        onChangeText={setWorkoutName}
       />
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSaveWorkout}>
-        <Text style={styles.buttonText}>Save Workout</Text>
+        <Text style={styles.buttonText}>Next: Add Exercises</Text>
       </TouchableOpacity>
     </View>
   );
@@ -59,13 +61,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    padding: SPACING.large,
-    justifyContent: "center",
+    padding: SPACING.medium,
   },
   header: {
     ...FONTS.header,
     textAlign: "center",
-    marginBottom: SPACING.large,
+    marginBottom: SPACING.medium,
   },
   input: {
     width: "100%",
@@ -79,15 +80,12 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: COLORS.buttonBackground,
-    paddingVertical: SPACING.medium,
+    padding: SPACING.medium,
     borderRadius: 8,
     alignItems: "center",
     marginTop: SPACING.large,
   },
-  buttonText: {
-    ...FONTS.button,
-    color: COLORS.buttonText,
-  },
+  buttonText: { ...FONTS.button },
 });
 
 export default WorkoutAddScreen;

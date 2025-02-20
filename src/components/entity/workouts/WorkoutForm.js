@@ -5,16 +5,18 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
 } from "react-native";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
-import ExerciseItem from "../exercise/ExerciseItem";
 
 const WorkoutForm = ({ navigation, route }) => {
   const { onAddWorkout } = route.params || {};
 
+  // Generate a unique WorkoutID
+  const generateWorkoutID = () => Date.now().toString();
+
   // Workout state
   const [workout, setWorkout] = useState({
+    WorkoutID: generateWorkoutID(),
     WorkoutName: "",
     WorkoutDate: new Date().toISOString().split("T")[0],
     Exercises: [], // Stores linked exercises
@@ -25,15 +27,7 @@ const WorkoutForm = ({ navigation, route }) => {
     setWorkout((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Add Exercise
-  const handleAddExercise = (exercise) => {
-    setWorkout((prev) => ({
-      ...prev,
-      Exercises: [...prev.Exercises, exercise], // ✅ Store exercises inside workout
-    }));
-  };
-
-  // Save Workout
+  // Save Workout and Navigate to WorkoutViewScreen
   const handleSaveWorkout = () => {
     if (!workout.WorkoutName.trim()) {
       alert("Workout name cannot be empty!");
@@ -41,7 +35,11 @@ const WorkoutForm = ({ navigation, route }) => {
     }
 
     onAddWorkout(workout); // ✅ Save workout with exercises
-    navigation.goBack();
+
+    // ✅ Navigate to `WorkoutViewScreen` instead of `ExerciseListScreen`
+    navigation.replace("WorkoutViewScreen", {
+      workoutID: workout.WorkoutID, // ✅ Pass only the workout ID
+    });
   };
 
   return (
@@ -59,28 +57,10 @@ const WorkoutForm = ({ navigation, route }) => {
       {/* Workout Date */}
       <Text style={styles.label}>Workout Date: {workout.WorkoutDate}</Text>
 
-      {/* Added Exercises List */}
-      <FlatList
-        data={workout.Exercises}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <ExerciseItem exercise={item} />}
-      />
-
       {/* Buttons */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.addExerciseButton}
-          onPress={() =>
-            navigation.navigate("ExerciseForm", {
-              onAdd: handleAddExercise,
-            })
-          }
-        >
-          <Text style={styles.buttonText}>+ Add Exercise</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity style={styles.saveButton} onPress={handleSaveWorkout}>
-          <Text style={styles.buttonText}>Save Workout</Text>
+          <Text style={styles.buttonText}>Next: View Workout</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -112,23 +92,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     marginTop: SPACING.medium,
-  },
-  addExerciseButton: {
-    backgroundColor: COLORS.buttonBackground,
-    padding: SPACING.medium,
-    borderRadius: 8,
-    alignItems: "center",
-    flex: 1,
-    marginRight: SPACING.small,
   },
   saveButton: {
     backgroundColor: COLORS.buttonBackground,
     padding: SPACING.medium,
     borderRadius: 8,
     alignItems: "center",
-    flex: 1,
   },
   buttonText: {
     ...FONTS.button,
