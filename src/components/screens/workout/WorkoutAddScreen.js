@@ -28,12 +28,8 @@ const WorkoutAddScreen = ({ navigation }) => {
 
     setWorkouts([...workouts, newWorkout]);
 
-    console.log(
-      "✅ Navigating to WorkoutViewScreen with workoutID:",
-      newWorkout.WorkoutID
-    );
+    console.log("✅ Navigating to WorkoutViewScreen with workout:", newWorkout);
 
-    // ✅ Navigate to WorkoutViewScreen using workoutID, not full object
     navigation.navigate("WorkoutViewScreen", {
       workoutID: newWorkout.WorkoutID,
     });

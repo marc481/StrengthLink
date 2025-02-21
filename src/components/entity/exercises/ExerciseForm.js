@@ -19,19 +19,35 @@ const ExerciseForm = ({ navigation, route }) => {
     Weight: "",
   });
 
-  // Handle input change
+  // Handle input change, ensuring numbers are properly formatted
   const handleChange = (field, value) => {
-    setExercise((prev) => ({ ...prev, [field]: value }));
+    setExercise((prev) => ({
+      ...prev,
+      [field]:
+        field === "ExerciseName"
+          ? value // Keep text fields as strings
+          : value.replace(/[^0-9.]/g, ""), // Ensure only numbers & decimals
+    }));
   };
 
   // Save Exercise
   const handleSaveExercise = () => {
+    console.log("Before saving:", exercise);
     if (!exercise.ExerciseName.trim()) {
       alert("Exercise name cannot be empty!");
       return;
     }
 
-    onAdd(exercise); // Save exercise data
+    const newExercise = {
+      ExerciseName: String(exercise.ExerciseName),
+      Sets: Number(exercise.Sets) || 0,
+      Reps: Number(exercise.Reps) || 0,
+      Weight: Number(exercise.Weight) || 0,
+    };
+
+    console.log("New Exercise Object:", newExercise);
+
+    onAdd(newExercise); // Save exercise data
     navigation.goBack();
   };
 

@@ -2,36 +2,22 @@ import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { COLORS } from "../../config/theme";
 
 const Icons = {
-  Add: ({ color = COLORS.buttonText, size = 24 }) => (
-    <MaterialIcons name="add" size={size} color={color} />
-  ),
-  Delete: ({ color = COLORS.buttonText, size = 24 }) => (
-    <MaterialIcons name="delete" size={size} color={color} />
-  ),
-  Edit: ({ color = COLORS.buttonText, size = 24 }) => (
-    <MaterialIcons name="edit" size={size} color={color} />
-  ),
-  Search: ({ color = COLORS.buttonText, size = 24 }) => (
-    <MaterialIcons name="search" size={size} color={color} />
-  ),
-  Home: ({ color = COLORS.footerActiveText, size = 24 }) => (
-    <MaterialCommunityIcons name="home" size={size} color={color} />
-  ),
-  Workout: ({ color = COLORS.footerActiveText, size = 24 }) => (
-    <MaterialCommunityIcons name="dumbbell" size={size} color={color} />
-  ),
-  Social: ({ color = COLORS.footerActiveText, size = 24 }) => (
-    <MaterialCommunityIcons name="account-group" size={size} color={color} />
-  ),
-  Progress: ({ color = COLORS.footerActiveText, size = 24 }) => (
-    <MaterialCommunityIcons name="chart-line" size={size} color={color} />
-  ),
-  Profile: ({ color = COLORS.footerActiveText, size = 24 }) => (
-    <MaterialCommunityIcons name="account" size={size} color={color} />
-  ),
-  User: ({ color = COLORS.primary, size = 24 }) => (
-    <MaterialCommunityIcons name="account-circle" size={size} color={color} />
-  ),
+  Add: (props) => <MaterialIcons name="add" {...props} />,
+  Delete: (props) => <MaterialIcons name="delete" {...props} />,
+  Edit: (props) => <MaterialIcons name="edit" {...props} />,
+  Save: (props) => <MaterialIcons name="save" {...props} />,
+  Search: (props) => <MaterialIcons name="search" {...props} />,
+  Home: (props) => <MaterialCommunityIcons name="home" {...props} />,
+  Workout: (props) => <MaterialCommunityIcons name="dumbbell" {...props} />,
+  Social: (props) => <MaterialCommunityIcons name="account-group" {...props} />,
+  Progress: (props) => <MaterialCommunityIcons name="chart-line" {...props} />,
+  Profile: (props) => <MaterialCommunityIcons name="account" {...props} />,
+  User: (props) => <MaterialCommunityIcons name="account-circle" {...props} />,
 };
 
 export default Icons;
+
+console.log("Icons object:", Icons);
+console.log("Icons.Save:", Icons.Save);
+console.log("Icons.Add:", Icons.Add);
+console.log("Icons.Delete:", Icons.Delete);

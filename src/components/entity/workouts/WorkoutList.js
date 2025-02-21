@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
-import WorkoutItem from "./WorkoutItem";
+import WorkoutItem from "./WorkoutItem"; // ✅ Ensure we use WorkoutItem here
 import { COLORS, SPACING } from "../../../config/theme";
 import { WorkoutContext } from "../../../../App";
 
@@ -13,10 +13,7 @@ const WorkoutList = ({ onSelect }) => {
         data={workouts}
         keyExtractor={(item) => item.WorkoutID.toString()}
         renderItem={({ item }) => (
-          <WorkoutItem
-            workout={{ ...item, Exercises: item.Exercises || [] }}
-            onSelect={onSelect}
-          />
+          <WorkoutItem workout={item} onSelect={onSelect} />
         )}
       />
     </View>

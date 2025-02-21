@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -6,32 +6,43 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { COLORS, SPACING, FONTS } from "../../../config/theme";
 import { WorkoutContext } from "../../../../App";
+import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
 const ExerciseAddScreen = ({ route, navigation }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
   const { workoutID } = route.params;
 
-  const [exercise, setExercise] = useState({
-    ExerciseName: "",
-    Sets: "",
-    Reps: "",
-    Weight: "",
-  });
+  const [exerciseName, setExerciseName] = useState("");
+  const [sets, setSets] = useState("");
+  const [reps, setReps] = useState("");
+  const [weight, setWeight] = useState("");
 
-  const handleSave = () => {
-    if (!exercise.ExerciseName.trim()) {
+  const handleSaveExercise = () => {
+    console.log("Exercise Name:", exerciseName);
+    console.log("Sets (before conversion):", sets);
+    console.log("Reps (before conversion):", reps);
+    console.log("Weight (before conversion):", weight);
+
+    if (!exerciseName.trim()) {
       alert("Exercise name cannot be empty!");
       return;
     }
 
+    const newExercise = {
+      ExerciseName: String(exerciseName), // Ensure it's a string
+      Sets: Number(sets) || 0, // Convert to number
+      Reps: Number(reps) || 0, // Convert to number
+      Weight: Number(weight) || 0, // Convert to number
+    };
+
+    console.log("✅ Added exercise to workout:", newExercise);
+
     const updatedWorkouts = workouts.map((w) =>
       w.WorkoutID === workoutID
-        ? { ...w, Exercises: [...w.Exercises, exercise] }
+        ? { ...w, Exercises: [...w.Exercises, newExercise] }
         : w
     );
-
     setWorkouts(updatedWorkouts);
     navigation.goBack();
   };
@@ -39,37 +50,36 @@ const ExerciseAddScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Add Exercise</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Exercise Name"
-        value={exercise.ExerciseName}
-        onChangeText={(value) =>
-          setExercise({ ...exercise, ExerciseName: value })
-        }
+        value={exerciseName}
+        onChangeText={setExerciseName}
       />
       <TextInput
         style={styles.input}
         placeholder="Sets"
-        value={exercise.Sets}
-        onChangeText={(value) => setExercise({ ...exercise, Sets: value })}
+        value={sets}
+        onChangeText={setSets}
         keyboardType="numeric"
       />
       <TextInput
         style={styles.input}
         placeholder="Reps"
-        value={exercise.Reps}
-        onChangeText={(value) => setExercise({ ...exercise, Reps: value })}
+        value={reps}
+        onChangeText={setReps}
         keyboardType="numeric"
       />
       <TextInput
         style={styles.input}
         placeholder="Weight (kg)"
-        value={exercise.Weight}
-        onChangeText={(value) => setExercise({ ...exercise, Weight: value })}
+        value={weight}
+        onChangeText={setWeight}
         keyboardType="numeric"
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSave}>
+      <TouchableOpacity style={styles.saveButton} onPress={handleSaveExercise}>
         <Text style={styles.buttonText}>Save Exercise</Text>
       </TouchableOpacity>
     </View>
@@ -82,23 +92,31 @@ const styles = StyleSheet.create({
     padding: SPACING.medium,
     backgroundColor: COLORS.background,
   },
-  header: { ...FONTS.header, marginBottom: SPACING.medium },
+  header: {
+    fontSize: FONTS.header || 20, // Ensure fallback number
+    marginBottom: SPACING.medium,
+    textAlign: "center",
+  },
   input: {
-    borderWidth: 1,
+    height: 50,
     borderColor: COLORS.border,
+    borderWidth: 1,
     borderRadius: 8,
-    padding: SPACING.small,
-    fontSize: 16,
+    paddingHorizontal: SPACING.small,
     marginBottom: SPACING.medium,
     backgroundColor: COLORS.inputBackground,
   },
-  button: {
-    backgroundColor: COLORS.buttonBackground,
+  saveButton: {
+    backgroundColor: COLORS.primary,
     padding: SPACING.medium,
     borderRadius: 8,
     alignItems: "center",
   },
-  buttonText: { ...FONTS.button },
+  buttonText: {
+    color: COLORS.buttonText,
+    fontSize: typeof FONTS.body === "number" ? FONTS.body : 16, // Ensure it's a number
+    fontWeight: "bold",
+  },
 });
 
 export default ExerciseAddScreen;

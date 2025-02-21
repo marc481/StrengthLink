@@ -1,64 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
+import { WorkoutContext } from "../../../../App";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
 const ExerciseModifyScreen = ({ navigation, route }) => {
-  const [updatedExercise, setUpdatedExercise] = useState(null);
-  const [modifyExercise, setModifyExercise] = useState(null);
+  const { workoutID, exercise } = route.params;
+  const { workouts, setWorkouts } = useContext(WorkoutContext);
 
-  useEffect(() => {
-    if (route.params?.exercise) {
-      setUpdatedExercise({ ...route.params.exercise });
-    } else {
-      console.error("❌ No exercise found in route params!");
-    }
-
-    if (route.params?.onModifyExercise) {
-      setModifyExercise(() => route.params.onModifyExercise); // ✅ Store safely
-    }
-  }, [route.params]);
-
-  // Handle input change
-  const handleChange = (field, value) => {
-    setUpdatedExercise((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  // Save Exercise
-  const handleSave = () => {
-    if (!updatedExercise || !updatedExercise.ExerciseName?.trim()) {
-      alert("Exercise name cannot be empty!");
-      return;
-    }
-
-    if (typeof modifyExercise === "function") {
-      modifyExercise(updatedExercise); // ✅ Call safely
-    } else {
-      console.error("❌ Error: `onModifyExercise` function is missing!");
-    }
-
-    navigation.goBack();
-  };
-
-  if (!updatedExercise) {
+  // Find the correct workout
+  const workoutIndex = workouts.findIndex((w) => w.WorkoutID === workoutID);
+  if (workoutIndex === -1) {
+    console.error("❌ Workout not found:", workoutID);
     return (
       <View style={styles.container}>
-        <Text style={styles.errorText}>Exercise not found.</Text>
+        <Text style={styles.errorText}>Workout not found.</Text>
       </View>
     );
   }
 
+  // State to modify exercise
+  const [updatedExercise, setUpdatedExercise] = useState({ ...exercise });
+
+  // Handle input change
+  const handleChange = (field, value) => {
+    setUpdatedExercise((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // Save updated exercise
+  const handleSaveExercise = () => {
+    if (!updatedExercise.ExerciseName.trim()) {
+      alert("Exercise name cannot be empty!");
+      return;
+    }
+
+    // Clone workouts and update the exercise in the selected workout
+    const updatedWorkouts = [...workouts];
+    updatedWorkouts[workoutIndex] = {
+      ...updatedWorkouts[workoutIndex],
+      Exercises: updatedWorkouts[workoutIndex].Exercises.map((ex) =>
+        ex === exercise ? updatedExercise : ex
+      ),
+    };
+
+    setWorkouts(updatedWorkouts);
+
+    console.log("✅ Exercise modified:", updatedExercise);
+    navigation.goBack(); // ✅ Go back to Workout View
+  };
+
+  // Delete exercise
+  const handleDeleteExercise = () => {
+    Alert.alert(
+      "Delete Exercise",
+      "Are you sure you want to delete this exercise?",
+      [
+        { text: "Cancel" },
+        {
+          text: "Delete",
+          onPress: () => {
+            const updatedWorkouts = [...workouts];
+            updatedWorkouts[workoutIndex].Exercises = updatedWorkouts[
+              workoutIndex
+            ].Exercises.filter((ex) => ex !== exercise);
+
+            setWorkouts(updatedWorkouts);
+            console.log("🗑️ Exercise deleted:", exercise);
+            navigation.goBack(); // ✅ Go back to Workout View
+          },
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Edit Exercise</Text>
+      <Text style={styles.header}>Modify Exercise</Text>
 
       <TextInput
         style={styles.input}
@@ -85,15 +109,28 @@ const ExerciseModifyScreen = ({ navigation, route }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Weight (kg/lbs)"
+        placeholder="Weight (kg)"
         value={updatedExercise.Weight}
         onChangeText={(value) => handleChange("Weight", value)}
         keyboardType="numeric"
       />
 
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.buttonText}>Save Changes</Text>
-      </TouchableOpacity>
+      {/* Save & Delete Buttons */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={handleSaveExercise}
+        >
+          <Text style={styles.buttonText}>Save Changes</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={handleDeleteExercise}
+        >
+          <Text style={styles.deleteButtonText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -102,10 +139,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    padding: SPACING.large,
+    padding: SPACING.medium,
   },
-  header: { ...FONTS.header, textAlign: "center", marginBottom: SPACING.large },
-  errorText: { ...FONTS.body, textAlign: "center", color: "red" },
+  header: {
+    ...FONTS.header,
+    textAlign: "center",
+    marginBottom: SPACING.medium,
+  },
   input: {
     width: "100%",
     borderWidth: 1,
@@ -116,14 +156,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: SPACING.medium,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: SPACING.medium,
+  },
   saveButton: {
+    flex: 1,
     backgroundColor: COLORS.buttonBackground,
-    paddingVertical: SPACING.medium,
+    padding: SPACING.medium,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: SPACING.large,
+    marginRight: SPACING.small,
   },
-  buttonText: { ...FONTS.button, color: COLORS.buttonText },
+  deleteButton: {
+    flex: 1,
+    backgroundColor: "mistyrose",
+    padding: SPACING.medium,
+    borderRadius: 8,
+    alignItems: "center",
+    marginLeft: SPACING.small,
+  },
+  buttonText: { ...FONTS.button },
+  deleteButtonText: { ...FONTS.button, color: "red" },
+  errorText: { ...FONTS.body, textAlign: "center", color: "red" },
 });
 
 export default ExerciseModifyScreen;

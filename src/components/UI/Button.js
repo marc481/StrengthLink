@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { COLORS, FONTS, SPACING } from "../../config/theme";
 
 // Button Component
-const Button = ({ label, onPress, variant = "default" }) => {
+const Button = ({ label, onPress, variant = "default", icon = null }) => {
   const getButtonStyle = () => {
     switch (variant) {
       case "delete":
@@ -17,6 +17,7 @@ const Button = ({ label, onPress, variant = "default" }) => {
 
   return (
     <TouchableOpacity style={getButtonStyle()} onPress={onPress}>
+      {icon && <View style={styles.icon}>{icon}</View>}
       <Text style={styles.text}>{label}</Text>
     </TouchableOpacity>
   );
@@ -30,28 +31,35 @@ const ButtonTray = ({ children }) => {
 // Styles
 const styles = StyleSheet.create({
   button: {
-    padding: SPACING.medium,
-    borderRadius: SPACING.small,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    padding: SPACING.medium,
+    borderRadius: SPACING.small,
     backgroundColor: COLORS.buttonBackground,
   },
   primaryButton: {
     backgroundColor: COLORS.primary,
   },
   deleteButton: {
-    backgroundColor: COLORS.error, // Should be red
+    backgroundColor: COLORS.error,
   },
   text: {
     ...FONTS.body,
     color: COLORS.buttonText,
+    marginLeft: SPACING.small,
   },
   buttonTray: {
     flexDirection: "row",
     justifyContent: "center",
     gap: SPACING.small,
   },
+  icon: {
+    marginRight: 5,
+  },
 });
 
-// Export both Button & ButtonTray
 export { Button, ButtonTray };
+
+console.log("Button component loaded:", Button);
+console.log("ButtonTray component loaded:", ButtonTray);

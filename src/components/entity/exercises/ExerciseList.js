@@ -3,22 +3,21 @@ import { View, FlatList, StyleSheet, Text } from "react-native";
 import ExerciseItem from "./ExerciseItem";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
-const ExerciseList = ({ exercises, onSelect }) => {
-  if (!exercises || exercises.length === 0) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No exercises added yet.</Text>
-      </View>
-    );
-  }
+const WorkoutList = ({ navigation }) => {
+  const { workouts } = useContext(WorkoutContext);
+
+  const handleSelectWorkout = (workoutID) => {
+    console.log("✅ Navigating with workoutID:", workoutID); // Debugging log
+    navigation.navigate("WorkoutViewScreen", { workoutID }); // ✅ Ensure we pass `workoutID`
+  };
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={exercises}
-        keyExtractor={(item, index) => index.toString()}
+        data={workouts}
+        keyExtractor={(item) => item.WorkoutID.toString()}
         renderItem={({ item }) => (
-          <ExerciseItem exercise={item} onSelect={() => onSelect(item)} />
+          <WorkoutItem workout={item} onSelect={handleSelectWorkout} />
         )}
       />
     </View>
