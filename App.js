@@ -1,18 +1,16 @@
-import React, { useState, createContext } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import WorkoutProvider from "./src/context/WorkoutContext"; // ✅ Import the provider
 import FooterNavigator from "./src/components/navigators/FooterNavigator";
 
-export const WorkoutContext = createContext();
-
 const App = () => {
-  const [workouts, setWorkouts] = useState([]); // No storage, pure state
-
   return (
-    <WorkoutContext.Provider value={{ workouts, setWorkouts }}>
+    <WorkoutProvider>
+      {/* ✅ Use WorkoutProvider */}
       <NavigationContainer>
         <FooterNavigator />
       </NavigationContainer>
-    </WorkoutContext.Provider>
+    </WorkoutProvider>
   );
 };
 
