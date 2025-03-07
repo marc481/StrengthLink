@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { WorkoutContext } from "../../../context/WorkoutContext";
 import WorkoutForm from "../../entity/workouts/WorkoutForm";
+import { COLORS } from "../../../config/theme";
 const WorkoutAddScreen = ({ navigation }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
 
@@ -23,6 +24,7 @@ const WorkoutAddScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.background,
     padding: 20,
   },
 });

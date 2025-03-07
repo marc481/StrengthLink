@@ -1,64 +1,45 @@
 import React, { useContext } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { WorkoutContext } from "../../../context/WorkoutContext";
 import WorkoutItem from "../../entity/workouts/WorkoutItem";
 import { Button, ButtonTray } from "../../UI/Button";
+import { COLORS, FONTS, SPACING, STYLES } from "../../../config/theme";
 
 const WorkoutListScreen = ({ navigation }) => {
-  const { workouts, setWorkouts } = useContext(WorkoutContext);
+  const { workouts } = useContext(WorkoutContext);
 
-  const handleDeleteWorkout = (workoutID) => {
-    setWorkouts(workouts.filter((w) => w.WorkoutID !== workoutID));
+  const goToAddWorkout = () => {
+    navigation.navigate("WorkoutAddScreen");
+  };
+
+  const goToWorkoutView = (workout) => {
+    navigation.navigate("WorkoutViewScreen", { workout });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Workouts</Text>
+    <View style={STYLES.container}>
+      <Text style={FONTS.header}>Your Workouts</Text>
 
-      {workouts.length > 0 ? (
+      {workouts.length === 0 ? (
+        <Text style={FONTS.muted}>No workouts added yet.</Text>
+      ) : (
         <FlatList
           data={workouts}
-          keyExtractor={(item) => item.WorkoutID.toString()} // Ensure unique keys
+          keyExtractor={(item) => item.WorkoutID.toString()}
           renderItem={({ item }) => (
             <WorkoutItem
               workout={item}
-              onSelect={
-                () =>
-                  navigation.navigate("WorkoutViewScreen", { workout: item }) // ✅ Pass workout object correctly
-              }
+              onSelect={() => goToWorkoutView(item)}
             />
           )}
         />
-      ) : (
-        <Text style={styles.noWorkoutsText}>No workouts added yet.</Text>
       )}
 
       <ButtonTray>
-        <Button
-          label="Add Workout"
-          onPress={() => navigation.navigate("WorkoutAddScreen")}
-        />
+        <Button label="Add Workout" onPress={goToAddWorkout} />
       </ButtonTray>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  noWorkoutsText: {
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 20,
-    color: "gray",
-  },
-});
 
 export default WorkoutListScreen;

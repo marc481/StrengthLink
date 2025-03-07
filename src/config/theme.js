@@ -13,9 +13,9 @@ export const COLORS = {
   // Buttons
   buttonBackground: "#669BBC", // Light blue for buttons
   buttonText: "#FFFFFF", // White for button text
-  buttonDangerBackground: "#DC3545", // 🔥 RED for delete buttons
+  buttonDangerBackground: "#DC3545", // RED for delete buttons
   buttonDangerText: "#FFFFFF", // White text for delete buttons
-  error: "#DC3545", // 🔥 RED (keep it consistent)
+  error: "#DC3545", //  RED (keep it consistent)
 
   // Footer Tabs
   footerActiveText: "#FFFFFF", // White for active tab
