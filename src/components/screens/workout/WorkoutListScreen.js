@@ -3,7 +3,7 @@ import { View, FlatList, Text } from "react-native";
 import { WorkoutContext } from "../../../context/WorkoutContext";
 import WorkoutItem from "../../entity/workouts/WorkoutItem";
 import { Button, ButtonTray } from "../../UI/Button";
-import { COLORS, FONTS, SPACING, STYLES } from "../../../config/theme";
+import { COLORS, FONTS, STYLES } from "../../../config/theme";
 
 const WorkoutListScreen = ({ navigation }) => {
   const { workouts } = useContext(WorkoutContext);
@@ -16,6 +16,12 @@ const WorkoutListScreen = ({ navigation }) => {
     navigation.navigate("WorkoutViewScreen", { workout });
   };
 
+  console.log("Workouts List:", workouts);
+  console.log(
+    "Workout IDs:",
+    workouts.map((w) => w.WorkoutID)
+  ); // Log all IDs to verify uniqueness
+
   return (
     <View style={STYLES.container}>
       <Text style={FONTS.header}>Your Workouts</Text>
@@ -25,7 +31,7 @@ const WorkoutListScreen = ({ navigation }) => {
       ) : (
         <FlatList
           data={workouts}
-          keyExtractor={(item) => item.WorkoutID.toString()}
+          keyExtractor={(item) => item.WorkoutID.toString()} // ✅ Ensures unique key
           renderItem={({ item }) => (
             <WorkoutItem
               workout={item}

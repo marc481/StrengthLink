@@ -8,7 +8,6 @@ import ExerciseInputModal from "../exercises/ExerciseInputModal";
 import { COLORS, STYLES, SPACING, FONTS } from "../../../config/theme";
 
 const defaultWorkout = {
-  WorkoutID: Math.floor(100000 + Math.random() * 900000),
   WorkoutName: "",
   WorkoutDate: "",
   Exercises: [],
@@ -150,7 +149,7 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
 
 const styles = StyleSheet.create({
   formContainer: {
-    backgroundColor: COLORS.background, // Ensure background matches theme
+    backgroundColor: COLORS.background,
     padding: SPACING.medium,
     borderRadius: 10,
     margin: SPACING.medium,

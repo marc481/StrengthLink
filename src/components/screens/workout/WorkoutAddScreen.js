@@ -1,18 +1,25 @@
 import React, { useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { WorkoutContext } from "../../../context/WorkoutContext";
 import WorkoutForm from "../../entity/workouts/WorkoutForm";
-import { COLORS } from "../../../config/theme";
+import { COLORS, STYLES } from "../../../config/theme";
+
+const generateUniqueID = () => Date.now() + Math.floor(Math.random() * 1000);
+
 const WorkoutAddScreen = ({ navigation }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
 
   const handleAddWorkout = (workout) => {
-    setWorkouts([...workouts, workout]);
+    const newWorkout = {
+      ...workout,
+      WorkoutID: generateUniqueID(),
+    };
+    setWorkouts([...workouts, newWorkout]);
     navigation.goBack();
   };
 
   return (
-    <View style={styles.container}>
+    <View style={STYLES.container}>
       <WorkoutForm
         onSubmit={handleAddWorkout}
         onCancel={() => navigation.goBack()}
@@ -20,13 +27,5 @@ const WorkoutAddScreen = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    padding: 20,
-  },
-});
 
 export default WorkoutAddScreen;
