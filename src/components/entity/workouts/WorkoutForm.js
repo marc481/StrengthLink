@@ -1,10 +1,11 @@
+// WorkoutForm.js
 import { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import Form from "../../UI/Form";
 import { Button, ButtonTray } from "../../UI/Button";
 import ExerciseItem from "../exercises/ExerciseItem";
 import ExerciseInputModal from "../exercises/ExerciseInputModal";
-import DatePickerModal from "./DatePickerModal"; // Adjust path as needed
+import CalendarModal from "./CalendarModal";
 import { COLORS, STYLES, SPACING, FONTS } from "../../../config/theme";
 
 const defaultWorkout = {
@@ -26,7 +27,7 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
 
   const [workout, setWorkout] = useState(originalWorkout || defaultWorkout);
   const [date, setDate] = useState(initialDate);
-  const [isDatePickerOpen, setDatePickerOpen] = useState(false);
+  const [isCalendarOpen, setCalendarOpen] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingExercise, setEditingExercise] = useState(null);
 
@@ -94,39 +95,49 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
   };
 
   const handleSubmit = () => {
-    const formattedDate = date.toISOString().split("T")[0];
-    onSubmit({ ...workout, WorkoutDate: formattedDate });
+    onSubmit({ ...workout, WorkoutDate: workout.WorkoutDate });
   };
 
   return (
     <ScrollView style={STYLES.container}>
       <View style={styles.formContainer}>
+        {/* Workout name input */}
         <Form.InputText
           label="Workout Name"
           value={workout.WorkoutName}
           onChange={(value) => setWorkout({ ...workout, WorkoutName: value })}
         />
 
+        {/* Display and pick the workout date */}
         <Text style={styles.subHeader}>Workout Date</Text>
         <Button
-          label={formatDateObject(date)}
-          onPress={() => setDatePickerOpen(true)}
+          label={formatDateObject(new Date(workout.WorkoutDate || date))}
+          onPress={() => setCalendarOpen(true)}
         />
 
-        <DatePickerModal
-          visible={isDatePickerOpen}
+        {/* CalendarModal integration */}
+        <CalendarModal
+          visible={isCalendarOpen}
           date={date}
           onConfirm={(selectedDate) => {
             setDate(selectedDate);
+            // Build the ISO string using local date values
+            const isoDate =
+              selectedDate.getFullYear() +
+              "-" +
+              (selectedDate.getMonth() + 1).toString().padStart(2, "0") +
+              "-" +
+              selectedDate.getDate().toString().padStart(2, "0");
             setWorkout({
               ...workout,
-              WorkoutDate: formatDateObject(selectedDate),
+              WorkoutDate: isoDate,
             });
-            setDatePickerOpen(false);
+            setCalendarOpen(false);
           }}
-          onCancel={() => setDatePickerOpen(false)}
+          onCancel={() => setCalendarOpen(false)}
         />
 
+        {/* List of exercises */}
         <Text style={styles.subHeader}>Exercises</Text>
         {workout.Exercises.length > 0 ? (
           workout.Exercises.map((exercise) => (
@@ -141,15 +152,18 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
           <Text style={styles.noExercisesText}>No exercises added yet.</Text>
         )}
 
+        {/* Button to add a new exercise */}
         <View style={styles.buttonContainer}>
           <Button label="Add Exercise" onPress={handleOpenModal} />
         </View>
 
+        {/* Save and Cancel buttons */}
         <ButtonTray>
           <Button label="Save Workout" onPress={handleSubmit} />
           <Button label="Cancel" onPress={onCancel} variant="delete" />
         </ButtonTray>
 
+        {/* Exercise input modal */}
         <ExerciseInputModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
