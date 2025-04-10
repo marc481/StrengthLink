@@ -4,10 +4,14 @@ import { WorkoutContext } from "../../../context/WorkoutContext";
 import WorkoutView from "../../entity/workouts/WorkoutView";
 import { COLORS, STYLES, FONTS } from "../../../config/theme";
 import { Button } from "../../UI/Button";
+import { useIsFocused } from "@react-navigation/native";
 
 const WorkoutViewScreen = ({ navigation, route }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
-  const workout = route.params?.workout || null;
+  const { workout: workoutParam } = route.params || {};
+  const workout = workouts.find((w) => w.WorkoutID === workoutParam.WorkoutID);
+
+  const isFocused = useIsFocused();
 
   if (!workout || !workout.WorkoutID) {
     return (
@@ -20,7 +24,6 @@ const WorkoutViewScreen = ({ navigation, route }) => {
     );
   }
 
-  // Handler for deleting the workout.
   const handleDeleteWorkout = () => {
     Alert.alert(
       "Delete Workout",
@@ -42,7 +45,6 @@ const WorkoutViewScreen = ({ navigation, route }) => {
     );
   };
 
-  // Handler for modifying the workout.
   const handleModifyWorkout = (updatedWorkout) => {
     const updatedWorkouts = workouts.map((w) =>
       w.WorkoutID === updatedWorkout.WorkoutID ? updatedWorkout : w
