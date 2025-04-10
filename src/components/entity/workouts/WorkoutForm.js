@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
-import { Alert } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import Form from "../../UI/Form";
 import { Button, ButtonTray } from "../../UI/Button";
 import ExerciseItem from "../exercises/ExerciseItem";
 import ExerciseInputModal from "../exercises/ExerciseInputModal";
+import DatePickerModal from "./DatePickerModal"; // Adjust path as needed
 import { COLORS, STYLES, SPACING, FONTS } from "../../../config/theme";
 
 const defaultWorkout = {
@@ -14,30 +14,47 @@ const defaultWorkout = {
 };
 
 const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
+  const getValidDate = (dateStr) => {
+    const parsed = new Date(dateStr);
+    return isNaN(parsed.getTime()) ? new Date() : parsed;
+  };
+
+  const initialDate =
+    originalWorkout && originalWorkout.WorkoutDate
+      ? getValidDate(originalWorkout.WorkoutDate)
+      : new Date();
+
   const [workout, setWorkout] = useState(originalWorkout || defaultWorkout);
+  const [date, setDate] = useState(initialDate);
+  const [isDatePickerOpen, setDatePickerOpen] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingExercise, setEditingExercise] = useState(null); // Track editing state
+  const [editingExercise, setEditingExercise] = useState(null);
 
-  const generateExerciseID = () => Math.floor(100000 + Math.random() * 900000);
+  const formatDateObject = (dateObj) => {
+    const day = dateObj.getDate().toString().padStart(2, "0");
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
-  // Open modal for user input
   const handleOpenModal = () => {
-    setEditingExercise(null); // Reset to adding mode
+    setEditingExercise(null);
     setModalVisible(true);
   };
 
-  // Save exercise (new or edited)
+  const generateExerciseID = () => Math.floor(100000 + Math.random() * 900000);
+
   const handleSaveExercise = (exercise) => {
     if (editingExercise) {
-      // Edit existing exercise
       setWorkout((prevWorkout) => ({
         ...prevWorkout,
         Exercises: prevWorkout.Exercises.map((ex) =>
-          ex.ExerciseID === editingExercise.ExerciseID ? exercise : ex
+          ex.ExerciseID === editingExercise.ExerciseID
+            ? { ...exercise, ExerciseID: editingExercise.ExerciseID }
+            : ex
         ),
       }));
     } else {
-      // Add new exercise
       setWorkout((prevWorkout) => ({
         ...prevWorkout,
         Exercises: [
@@ -49,13 +66,11 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
     setModalVisible(false);
   };
 
-  // Edit existing exercise
   const handleEditExercise = (exercise) => {
     setEditingExercise(exercise);
     setModalVisible(true);
   };
 
-  // Delete exercise
   const handleDeleteExercise = (exerciseID) => {
     Alert.alert(
       "Delete Exercise",
@@ -78,19 +93,8 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
     );
   };
 
-  // Auto-format date to DD/MM/YYYY
-  const handleDateChange = (text) => {
-    let formatted = text.replace(/\D/g, ""); // Remove non-numeric characters
-    if (formatted.length > 2)
-      formatted = `${formatted.slice(0, 2)}/${formatted.slice(2)}`;
-    if (formatted.length > 5)
-      formatted = `${formatted.slice(0, 5)}/${formatted.slice(5, 9)}`;
-    setWorkout({ ...workout, WorkoutDate: formatted });
-  };
-
   const handleSubmit = () => {
-    const [day, month, year] = workout.WorkoutDate.split("/");
-    const formattedDate = `${year}-${month}-${day}`;
+    const formattedDate = date.toISOString().split("T")[0];
     onSubmit({ ...workout, WorkoutDate: formattedDate });
   };
 
@@ -104,13 +108,23 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
         />
 
         <Text style={styles.subHeader}>Workout Date</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="DD/MM/YYYY"
-          value={workout.WorkoutDate}
-          onChangeText={handleDateChange}
-          keyboardType="numeric"
-          maxLength={10}
+        <Button
+          label={formatDateObject(date)}
+          onPress={() => setDatePickerOpen(true)}
+        />
+
+        <DatePickerModal
+          visible={isDatePickerOpen}
+          date={date}
+          onConfirm={(selectedDate) => {
+            setDate(selectedDate);
+            setWorkout({
+              ...workout,
+              WorkoutDate: formatDateObject(selectedDate),
+            });
+            setDatePickerOpen(false);
+          }}
+          onCancel={() => setDatePickerOpen(false)}
         />
 
         <Text style={styles.subHeader}>Exercises</Text>
@@ -140,7 +154,7 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
           onSave={handleSaveExercise}
-          initialExercise={editingExercise} // Pass exercise if editing
+          initialExercise={editingExercise}
         />
       </View>
     </ScrollView>
@@ -161,17 +175,12 @@ const styles = StyleSheet.create({
   subHeader: {
     ...FONTS.bold,
     marginTop: SPACING.small,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: COLORS.inputBorder,
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: COLORS.inputBackground,
+    marginBottom: SPACING.small / 2,
   },
   noExercisesText: {
     ...FONTS.muted,
     textAlign: "center",
+    marginVertical: SPACING.medium,
   },
   buttonContainer: {
     alignItems: "center",

@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { View, Text, Alert } from "react-native";
 import { WorkoutContext } from "../../../context/WorkoutContext";
-import { Button, ButtonTray } from "../../UI/Button";
-import WorkoutView from "../../entity/workouts/WorkoutView"; // ✅ Use the correct component
+import WorkoutView from "../../entity/workouts/WorkoutView";
 import { COLORS, STYLES, FONTS } from "../../../config/theme";
+import { Button } from "../../UI/Button";
 
 const WorkoutViewScreen = ({ navigation, route }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
@@ -20,6 +20,7 @@ const WorkoutViewScreen = ({ navigation, route }) => {
     );
   }
 
+  // Handler for deleting the workout.
   const handleDeleteWorkout = () => {
     Alert.alert(
       "Delete Workout",
@@ -41,11 +42,24 @@ const WorkoutViewScreen = ({ navigation, route }) => {
     );
   };
 
+  // Handler for modifying the workout.
+  const handleModifyWorkout = (updatedWorkout) => {
+    const updatedWorkouts = workouts.map((w) =>
+      w.WorkoutID === updatedWorkout.WorkoutID ? updatedWorkout : w
+    );
+    setWorkouts(updatedWorkouts);
+  };
+
   return (
     <View style={STYLES.container}>
       <WorkoutView
         workout={workout}
-        onModify={() => navigation.navigate("WorkoutModifyScreen", { workout })}
+        onModify={() =>
+          navigation.navigate("WorkoutModifyScreen", {
+            workout,
+            onModify: handleModifyWorkout,
+          })
+        }
         onDelete={handleDeleteWorkout}
       />
     </View>
