@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, FlatList, Text } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WorkoutContext } from "../../../context/WorkoutContext";
 import WorkoutItem from "../../entity/workouts/WorkoutItem";
 import { Button, ButtonTray } from "../../UI/Button";
 import { COLORS, FONTS, STYLES } from "../../../config/theme";
 
 const WorkoutListScreen = ({ navigation }) => {
-  const { workouts } = useContext(WorkoutContext);
+  const { workouts, setWorkouts } = useContext(WorkoutContext);
 
   const goToAddWorkout = () => {
     navigation.navigate("WorkoutAddScreen");
@@ -16,11 +17,20 @@ const WorkoutListScreen = ({ navigation }) => {
     navigation.navigate("WorkoutViewScreen", { workout });
   };
 
-  console.log("Workouts List:", workouts);
-  console.log(
-    "Workout IDs:",
-    workouts.map((w) => w.WorkoutID)
-  ); // Log all IDs to verify uniqueness
+  // 👇 Logs full workouts data in dev-friendly format
+  useEffect(() => {
+    console.log(
+      "📦 All workouts (expanded):\n",
+      JSON.stringify(workouts, null, 2)
+    );
+  }, [workouts]);
+
+  // 🔧 Dev tool to wipe everything
+  const clearWorkoutData = async () => {
+    await AsyncStorage.removeItem("workouts");
+    setWorkouts([]);
+    console.log("✅ Cleared all workouts from AsyncStorage.");
+  };
 
   return (
     <View style={STYLES.container}>
@@ -31,7 +41,7 @@ const WorkoutListScreen = ({ navigation }) => {
       ) : (
         <FlatList
           data={workouts}
-          keyExtractor={(item) => item.WorkoutID.toString()} // ✅ Ensures unique key
+          keyExtractor={(item) => item.WorkoutID.toString()}
           renderItem={({ item }) => (
             <WorkoutItem
               workout={item}
@@ -43,6 +53,12 @@ const WorkoutListScreen = ({ navigation }) => {
 
       <ButtonTray>
         <Button label="Add Workout" onPress={goToAddWorkout} />
+        {/* 🧪 Dev-only button */}
+        <Button
+          label="Clear All Workouts"
+          onPress={clearWorkoutData}
+          variant="delete"
+        />
       </ButtonTray>
     </View>
   );

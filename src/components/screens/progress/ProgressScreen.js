@@ -1,80 +1,120 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Dimensions, StyleSheet } from "react-native";
-import { BarChart } from "react-native-chart-kit";
 import { WorkoutContext } from "../../../context/WorkoutContext";
-import { COLORS, STYLES, FONTS, SPACING } from "../../../config/theme";
+import { Picker } from "@react-native-picker/picker";
+import { LineChart } from "react-native-chart-kit";
+import { STYLES, FONTS, COLORS, SPACING } from "../../../config/theme";
 
 const ProgressScreen = () => {
   const { workouts } = useContext(WorkoutContext);
-  const [workoutData, setWorkoutData] = useState([]);
 
-  useEffect(() => {
-    // Process workout data to count workouts per week
-    const countWorkoutsPerWeek = () => {
-      const weeks = {}; // { "Week 1": 3, "Week 2": 5, ... }
-      workouts.forEach((workout) => {
-        const date = new Date(workout.WorkoutDate);
-        const weekNumber = Math.ceil(date.getDate() / 7); // Get week number in the month
-        const key = `Week ${weekNumber}`;
-        weeks[key] = (weeks[key] || 0) + 1;
+  // Group exercise data by name
+  const progressMap = {};
+  workouts.forEach((workout) => {
+    workout.Exercises?.forEach((ex) => {
+      if (!progressMap[ex.ExerciseName]) progressMap[ex.ExerciseName] = [];
+      progressMap[ex.ExerciseName].push({
+        date: workout.WorkoutDate,
+        weight: ex.Weight,
       });
+    });
+  });
 
-      // Convert to chart format
-      const labels = Object.keys(weeks);
-      const data = Object.values(weeks);
-      setWorkoutData({ labels, data });
-    };
+  const exerciseNames = Object.keys(progressMap);
+  const [selectedExercise, setSelectedExercise] = useState(exerciseNames[0]);
 
-    countWorkoutsPerWeek();
-  }, [workouts]);
+  const chartData =
+    progressMap[selectedExercise]?.sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    ) || [];
+
+  const weights = chartData.map((d) => d.weight);
+  const labels = chartData.map((d) => {
+    const [y, m, day] = d.date.split("-");
+    return `${day}/${m}`;
+  });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Workout Progress</Text>
-      {workoutData.labels?.length > 0 ? (
-        <BarChart
-          data={{
-            labels: workoutData.labels,
-            datasets: [{ data: workoutData.data }],
-          }}
-          width={Dimensions.get("window").width - 40}
-          height={250}
-          yAxisLabel=""
-          chartConfig={{
-            backgroundGradientFrom: COLORS.background,
-            backgroundGradientTo: COLORS.background,
-            color: (opacity = 1) => `rgba(0, 43, 91, ${opacity})`, // Dark blue bars
-            labelColor: () => COLORS.bodyText,
-            barPercentage: 0.6,
-          }}
-          style={styles.chart}
-        />
+    <View style={STYLES.container}>
+      <Text style={[FONTS.header, styles.title]}>Progress Tracker</Text>
+
+      {exerciseNames.length > 0 ? (
+        <>
+          <View style={styles.card}>
+            <Text style={FONTS.bold}>Select Exercise:</Text>
+            <Picker
+              selectedValue={selectedExercise}
+              onValueChange={setSelectedExercise}
+              style={styles.picker}
+              dropdownIconColor={COLORS.bodyText}
+            >
+              {exerciseNames.map((name) => (
+                <Picker.Item label={name} value={name} key={name} />
+              ))}
+            </Picker>
+          </View>
+
+          <View style={styles.chartContainer}>
+            <LineChart
+              data={{
+                labels,
+                datasets: [{ data: weights }],
+              }}
+              width={Dimensions.get("window").width - SPACING.large * 2}
+              height={220}
+              yAxisSuffix="kg"
+              chartConfig={{
+                backgroundGradientFrom: COLORS.inputBackground,
+                backgroundGradientTo: COLORS.inputBackground,
+                decimalPlaces: 1,
+                color: (opacity = 1) => `rgba(0, 43, 91, ${opacity})`, // dark blue
+                labelColor: () => COLORS.bodyText,
+                propsForDots: {
+                  r: "5",
+                  strokeWidth: "2",
+                  stroke: COLORS.infoHighlight,
+                },
+              }}
+              style={styles.chart}
+            />
+          </View>
+        </>
       ) : (
-        <Text style={styles.noData}>No workout data available.</Text>
+        <Text style={FONTS.muted}>
+          No exercise data to show yet. Add a workout to get started!
+        </Text>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    ...STYLES.container,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  header: {
-    ...FONTS.header,
+  title: {
     marginBottom: SPACING.medium,
+  },
+  card: {
+    backgroundColor: COLORS.inputBackground,
+    padding: SPACING.medium,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS.divider,
+    marginBottom: SPACING.large,
+  },
+  picker: {
+    color: COLORS.bodyText,
+    marginTop: SPACING.small,
+  },
+  chartContainer: {
+    backgroundColor: COLORS.inputBackground,
+    paddingVertical: SPACING.medium,
+    paddingHorizontal: SPACING.small,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.divider,
   },
   chart: {
     marginVertical: SPACING.medium,
-    borderRadius: 10,
-  },
-  noData: {
-    ...FONTS.muted,
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: SPACING.large,
+    borderRadius: 16,
   },
 });
 
