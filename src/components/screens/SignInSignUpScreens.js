@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import Form from "../UI/Form";
 import Icons from "../UI/icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -113,7 +114,9 @@ export const SignInScreen = ({ navigation }) => {
         return;
       }
       await AsyncStorage.setItem("currentUser", JSON.stringify(user));
-      navigation.replace("Social");
+      navigation.dispatch(
+        CommonActions.reset({ index: 0, routes: [{ name: "Main" }] })
+      );
     } catch {
       Alert.alert("Error", "Could not sign in");
     }

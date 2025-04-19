@@ -4,11 +4,9 @@ import { Button, ButtonTray } from "../../UI/Button";
 import { COLORS, SPACING, FONTS } from "../../../config/theme";
 
 const EditProfileScreen = ({ route, navigation }) => {
-  // 🟢 State: Load Profile Data
   const { profileData, onSave } = route.params;
   const [profile, setProfile] = useState(profileData);
 
-  // 🟢 Handlers
   const handleChange = (field, value) => {
     setProfile({ ...profile, [field]: value });
   };
@@ -19,7 +17,7 @@ const EditProfileScreen = ({ route, navigation }) => {
   };
 
   return (
-    // 🟢 Views
+    //  Views
     <View style={styles.container}>
       <Text style={styles.header}>Edit Profile</Text>
 
@@ -84,7 +82,6 @@ const EditProfileScreen = ({ route, navigation }) => {
   );
 };
 
-// 🟢 Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
