@@ -8,7 +8,6 @@ const SocialScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [friends, setFriends] = useState([]); // Stores only added friends
 
-  // Navigate to Add Friend Screen
   const gotoAddFriendScreen = () => {
     navigation.navigate("AddFriendScreen", {
       onAddFriend: (newFriend) => {

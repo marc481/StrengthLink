@@ -25,7 +25,7 @@ const FriendDetailScreen = ({ route, navigation }) => {
       </Text>
       <Text>{friend.UserEmail}</Text>
 
-      {/* ❌ Remove Friend */}
+      {/*  Remove Friend */}
       {isFriend && (
         <TouchableOpacity
           onPress={handleDelete}

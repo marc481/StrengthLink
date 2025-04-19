@@ -1,15 +1,12 @@
-// src/components/screens/SignInSignUpScreens.js
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import Screen from "../layout/Screen"; // ← 1 level up → layout
-import Form from "../UI/Form"; // ← 1 level up → UI
-import Icons from "../UI/icons"; // ← 1 level up → UI
+import Form from "../UI/Form";
+import Icons from "../UI/icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { COLORS, FONTS, SPACING, STYLES } from "../../config/theme"; // 2 levels up → config
+import { COLORS, FONTS, SPACING, STYLES } from "../../config/theme";
 
 const USERS_KEY = "users";
 
-/* ──────────────────────────────  SIGN‑UP  ────────────────────────────── */
 export const SignUpScreen = ({ navigation }) => {
   const [user, setUser] = useState({
     firstName: "",
@@ -26,7 +23,6 @@ export const SignUpScreen = ({ navigation }) => {
     try {
       const stored = await AsyncStorage.getItem(USERS_KEY);
       const users = stored ? JSON.parse(stored) : [];
-
       if (
         users.find(
           (u) => u.username === user.username || u.email === user.email
@@ -35,7 +31,6 @@ export const SignUpScreen = ({ navigation }) => {
         Alert.alert("Error", "Username or email already exists");
         return;
       }
-
       const newUser = { id: Date.now().toString(), ...user };
       await AsyncStorage.setItem(
         USERS_KEY,
@@ -43,14 +38,13 @@ export const SignUpScreen = ({ navigation }) => {
       );
       Alert.alert("Success", "Account created! Please sign in.");
       navigation.replace("SignIn");
-    } catch (e) {
-      console.error(e);
+    } catch {
       Alert.alert("Error", "Could not save user");
     }
   };
 
   return (
-    <Screen style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.header}>Create Account</Text>
       <Form
         onSubmit={handleSubmit}
@@ -91,11 +85,10 @@ export const SignUpScreen = ({ navigation }) => {
       >
         <Text style={styles.switchText}>Already have an account? Sign In</Text>
       </TouchableOpacity>
-    </Screen>
+    </View>
   );
 };
 
-/* ──────────────────────────────  SIGN‑IN  ────────────────────────────── */
 export const SignInScreen = ({ navigation }) => {
   const [credentials, setCredentials] = useState({
     identifier: "",
@@ -109,29 +102,25 @@ export const SignInScreen = ({ navigation }) => {
     try {
       const stored = await AsyncStorage.getItem(USERS_KEY);
       const users = stored ? JSON.parse(stored) : [];
-
       const user = users.find(
         (u) =>
           (u.username === credentials.identifier ||
             u.email === credentials.identifier) &&
           u.password === credentials.password
       );
-
       if (!user) {
         Alert.alert("Error", "Invalid credentials");
         return;
       }
-
       await AsyncStorage.setItem("currentUser", JSON.stringify(user));
-      navigation.replace("Social"); // or your main tab name
-    } catch (e) {
-      console.error(e);
+      navigation.replace("Social");
+    } catch {
       Alert.alert("Error", "Could not sign in");
     }
   };
 
   return (
-    <Screen style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.header}>Welcome Back</Text>
       <Form
         onSubmit={handleSubmit}
@@ -156,7 +145,7 @@ export const SignInScreen = ({ navigation }) => {
       >
         <Text style={styles.switchText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
-    </Screen>
+    </View>
   );
 };
 
