@@ -1,13 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Alert } from "react-native";
 import { WorkoutContext } from "../../../context/WorkoutContext";
 import WorkoutView from "../../entity/workouts/WorkoutView";
 import { COLORS, STYLES, FONTS } from "../../../config/theme";
 import { Button } from "../../UI/Button";
 import { useIsFocused } from "@react-navigation/native";
+import InviteFriendsButton from "./InviteFriendsButton";
 
 const WorkoutViewScreen = ({ navigation, route }) => {
   const { workouts, setWorkouts } = useContext(WorkoutContext);
+  const [invitedIds, setInvitedIds] = useState([]);
+
+  const friends = [
+    { id: 1, name: "Jamie" },
+    { id: 2, name: "Riley" },
+    { id: 3, name: "Casey" },
+  ];
+
   const { workout: workoutParam } = route.params || {};
   const workout = workouts.find((w) => w.WorkoutID === workoutParam.WorkoutID);
 
@@ -52,6 +61,13 @@ const WorkoutViewScreen = ({ navigation, route }) => {
     setWorkouts(updatedWorkouts);
   };
 
+  const handleInvite = (friend) => {
+    if (invitedIds.includes(friend.id)) return;
+    setInvitedIds([...invitedIds, friend.id]);
+  };
+
+  const invitedFriends = friends.filter((f) => invitedIds.includes(f.id));
+
   return (
     <View style={STYLES.container}>
       <WorkoutView
@@ -63,6 +79,21 @@ const WorkoutViewScreen = ({ navigation, route }) => {
           })
         }
         onDelete={handleDeleteWorkout}
+      />
+
+      {invitedFriends.length > 0 && (
+        <View style={[STYLES.infoTray, { marginVertical: 12 }]}>
+          <Text style={FONTS.infoHighlight}>Friends in this workout:</Text>
+          <Text style={FONTS.body}>
+            {invitedFriends.map((f) => f.name).join(", ")}
+          </Text>
+        </View>
+      )}
+
+      <InviteFriendsButton
+        friends={friends}
+        invitedIds={invitedIds}
+        onInvite={handleInvite}
       />
     </View>
   );

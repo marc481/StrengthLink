@@ -16,7 +16,6 @@ const AddFriendScreen = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  // 🔍 Search for users
   const handleSearch = (query) => {
     setSearchQuery(query);
     if (query.length > 0) {
@@ -29,20 +28,16 @@ const AddFriendScreen = ({ navigation, route }) => {
     }
   };
 
-  // 🔹 Select user to add and send back data
   const handleSelectUser = (friend) => {
-    route.params?.onAddFriend?.(friend); // ✅ Call function if it exists
-    navigation.goBack(); // ✅ Navigate back to SocialScreen
+    route.params?.onAddFriend?.(friend);
   };
 
-  //  Handle Add button
   const handleAddFriend = () => {
     if (filteredUsers.length === 1) {
-      handleSelectUser(filteredUsers[0]); // If exactly one result, add directly
+      handleSelectUser(filteredUsers[0]);
     }
   };
 
-  //  Handle Cancel button
   const handleCancel = () => {
     navigation.goBack();
   };
@@ -87,12 +82,12 @@ const AddFriendScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    ...STYLES.container, // Using the container style from theme.js
+    ...STYLES.container,
     justifyContent: "center",
     alignItems: "center",
   },
   header: {
-    ...FONTS.header, // Using header font from theme.js
+    ...FONTS.header,
     marginBottom: SPACING.medium,
   },
   searchContainer: {
@@ -108,37 +103,37 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
-    ...FONTS.body, // Using body font from theme.js
+    ...FONTS.body,
     paddingHorizontal: SPACING.small,
   },
   searchButton: {
     padding: SPACING.small,
   },
   buttonContainer: {
-    ...STYLES.buttonTray, // Using buttonTray style from theme.js
+    ...STYLES.buttonTray,
     marginTop: SPACING.medium,
     width: "80%",
   },
   addButton: {
     flex: 1,
-    backgroundColor: COLORS.buttonBackground, // From theme.js
+    backgroundColor: COLORS.buttonBackground,
     padding: SPACING.medium,
     borderRadius: SPACING.small,
     alignItems: "center",
     marginRight: SPACING.small,
   },
   addButtonText: {
-    ...FONTS.button, // Using button font from theme.js
+    ...FONTS.button,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: COLORS.buttonDangerBackground, // From theme.js
+    backgroundColor: COLORS.buttonDangerBackground,
     padding: SPACING.medium,
     borderRadius: SPACING.small,
     alignItems: "center",
   },
   cancelButtonText: {
-    ...FONTS.button, // Using button font from theme.js
+    ...FONTS.button,
   },
 });
 
