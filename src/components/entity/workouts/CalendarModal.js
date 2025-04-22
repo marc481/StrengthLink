@@ -16,7 +16,6 @@ const CalendarModal = ({ visible, date, onConfirm, onCancel }) => {
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          {/* Calendar component for selecting a date */}
           <Calendar
             markedDates={{
               [selectedDate]: {

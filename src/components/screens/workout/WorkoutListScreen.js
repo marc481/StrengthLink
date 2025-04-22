@@ -17,19 +17,17 @@ const WorkoutListScreen = ({ navigation }) => {
     navigation.navigate("WorkoutViewScreen", { workout });
   };
 
-  // 👇 Logs full workouts data in dev-friendly format
   useEffect(() => {
     console.log(
-      "📦 All workouts (expanded):\n",
+      " All workouts (expanded):\n",
       JSON.stringify(workouts, null, 2)
     );
   }, [workouts]);
 
-  // 🔧 Dev tool to wipe everything
   const clearWorkoutData = async () => {
     await AsyncStorage.removeItem("workouts");
     setWorkouts([]);
-    console.log("✅ Cleared all workouts from AsyncStorage.");
+    console.log(" Cleared all workouts from AsyncStorage.");
   };
 
   return (
@@ -53,7 +51,6 @@ const WorkoutListScreen = ({ navigation }) => {
 
       <ButtonTray>
         <Button label="Add Workout" onPress={goToAddWorkout} />
-        {/* 🧪 Dev-only button */}
         <Button
           label="Clear All Workouts"
           onPress={clearWorkoutData}

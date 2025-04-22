@@ -24,7 +24,7 @@ const WorkoutProvider = ({ children }) => {
           setWorkouts(validatedWorkouts);
         }
       } catch (error) {
-        console.error("🚨 Error loading workouts:", error);
+        console.error("Error loading workouts:", error);
       }
     };
     loadWorkouts();
@@ -36,7 +36,7 @@ const WorkoutProvider = ({ children }) => {
       try {
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
       } catch (error) {
-        console.error("🚨 Error saving workouts:", error);
+        console.error(" Error saving workouts:", error);
       }
     };
     if (workouts.length > 0) {
