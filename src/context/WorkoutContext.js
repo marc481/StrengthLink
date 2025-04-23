@@ -8,18 +8,16 @@ const STORAGE_KEY = "workouts";
 const WorkoutProvider = ({ children }) => {
   const [workouts, setWorkouts] = useState([]);
 
-  // Load workouts from AsyncStorage when the app starts.
   useEffect(() => {
     const loadWorkouts = async () => {
       try {
         const savedWorkouts = await AsyncStorage.getItem(STORAGE_KEY);
         if (savedWorkouts) {
           const parsedWorkouts = JSON.parse(savedWorkouts);
-          // Ensure dates are stored in proper `YYYY-MM-DD` format
           const validatedWorkouts = parsedWorkouts.map((workout) => ({
             ...workout,
             WorkoutDate:
-              workout.WorkoutDate || new Date().toISOString().split("T")[0], // Default to today if missing
+              workout.WorkoutDate || new Date().toISOString().split("T")[0],
           }));
           setWorkouts(validatedWorkouts);
         }

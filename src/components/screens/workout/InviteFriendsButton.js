@@ -1,4 +1,3 @@
-// src/components/InviteFriendsButton.js
 import React, { useState, useMemo } from "react";
 import {
   View,
