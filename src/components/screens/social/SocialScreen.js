@@ -41,7 +41,7 @@ const SocialScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* 🔍 Search Bar */}
+      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}

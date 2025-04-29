@@ -115,7 +115,6 @@ const WorkoutForm = ({ originalWorkout, onSubmit, onCancel }) => {
           onPress={() => setCalendarOpen(true)}
         />
 
-        {/* CalendarModal integration */}
         <CalendarModal
           visible={isCalendarOpen}
           date={date}

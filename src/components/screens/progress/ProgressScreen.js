@@ -73,7 +73,7 @@ const ProgressScreen = () => {
           {currentGoal ? (
             <View style={styles.goalCard}>
               <Text style={FONTS.infoHighlight}>
-                🎯 Goal: {currentGoal.TargetWeight}kg
+                Goal: {currentGoal.TargetWeight}kg
               </Text>
               <Text style={FONTS.body}>Personal Best: {personalBest}kg</Text>
               <Text style={FONTS.body}>

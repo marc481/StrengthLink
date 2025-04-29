@@ -1,4 +1,3 @@
-// GoalContext.js
 import React, { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -28,7 +27,7 @@ const GoalProvider = ({ children }) => {
       try {
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
       } catch (err) {
-        console.error("🚨 Error saving goals:", err);
+        console.error(" Error saving goals:", err);
       }
     };
     saveGoals();
