@@ -9,7 +9,7 @@ import {
 import Screen from "../../layout/Screen";
 import UserList from "../../entity/users/UserList";
 import initialUsers from "../../../data/users";
-import { COLORS, SPACING, FONTS, STYLES } from "../../../config/theme"; // ✅ Import STYLES
+import { COLORS, SPACING, FONTS, STYLES } from "../../../config/theme";
 import Icons from "../../UI/icons";
 
 const AddFriendScreen = ({ navigation, route }) => {
